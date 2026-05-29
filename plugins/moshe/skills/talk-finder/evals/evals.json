@@ -1,0 +1,73 @@
+{
+  "skill_name": "talk-finder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to submit to PyTexas a talk about linters. I really think linters can make AI workflows more efficient by catching problems early, so humans don't have to give stylistic feedback.",
+      "expected_output": "Zero-shot path: no interview. Researches PyTexas's current CFP (fields, tracks, deadline, audience), then produces title + abstract + description + audience takeaways tailored to it, delivered as a fillable copy-paste HTML page (or filled form if one is given).",
+      "files": [],
+      "expectations": [
+        "Does not run the topic-discovery interview (recognizes venue + topic + thesis are all present)",
+        "Searches the web for PyTexas's actual CFP / submission details rather than inventing them",
+        "Produces all four canonical fields: title, abstract, description, audience takeaways",
+        "Abstract is written in 'you' language and audience takeaways are concrete and actionable, not 'learn best practices'",
+        "The linters-for-AI-workflows thesis (catch problems early so humans skip stylistic feedback) is the spine of the abstract, not sanded into a generic linting talk",
+        "Delivers a fillable copy-paste HTML page (or fills a supplied form)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm running a talk-finding interview with someone and I want you to carry it through to the read and the draft. Treat the exchange below as the conversation so far (their answers arrived turn by turn). After processing it, give me (a) your running ranking of candidate topics with the signals behind each, (b) your confirm-by-action turn to the person, and (c) a first draft of the CFP fields for whichever topic you land on.\n\n--- transcript ---\nYou: Do you have a conference or kind of event in mind? Totally fine if it's 'not sure yet.'\nThem: Not sure yet, honestly. I'll figure that out once I know what the talk is.\nYou: What have you been interested in lately?\nThem: Observability, mostly. Distributed tracing is a big priority for our org this year and I've been going deep on it. It's really important and I think a lot of teams struggle with it.\nYou: What are you working on right now?\nThem: Migrating one of our services to a new framework, which is fine, pretty standard. Oh — and on weekends I've been messing with this little CLI tool I built that diffs Kafka consumer-group lag across deploys. Probably not relevant to a talk though.\nYou: What's a hard problem you've been chewing on?\nThem: The migration has some annoying edges but nothing wild. ... actually the lag tool got interesting this week — I realized I can correlate a lag spike to the exact rebalance that caused it by diffing the partition assignments, and now I kind of want to make it visualize rebalances over time. I keep opening it instead of doing the migration, ha.\nYou: Tell me more about the observability work.\nThem: I mean, it's tracing, you instrument spans, propagate context. The usual. It's valuable for the org.\n--- end transcript ---",
+      "expected_output": "Multi-turn detection: should NOT pick observability/tracing despite it sounding important and org-relevant — that thread shows should-language, org-importance framing, and goes flat on follow-up. Should identify the weekend Kafka consumer-lag tool as the live thread on the strength of spontaneous return (raised it unprompted, returned to it unprompted), concrete detail (correlating lag spikes to rebalances via partition-assignment diffs), forward motion (wants to visualize rebalances next), and affect ('keep opening it instead of'). Should apply the applicability filter: a personal weekend CLI is niche, so reframe it as a case study for a general lesson (debugging Kafka rebalances / consumer lag) rather than rejecting it, and name that tension. Confirm-by-action turn should show the slate, state the read with confidence scaled to the (fairly clear) margin, and offer an off-ramp. Should respect 'not sure yet' on venue and not invent one.",
+      "files": [],
+      "expectations": [
+        "Ranks the Kafka consumer-lag tool above observability/tracing",
+        "Explicitly cites spontaneous/unprompted return as a reason the lag tool ranks high",
+        "Flags observability's weak signals (should-language, org-importance framing, flatness on follow-up) rather than rewarding its surface 'importance'",
+        "Applies the applicability filter and reframes the niche weekend tool as a general-lesson case study instead of discarding it",
+        "Produces a confirm-by-action turn that shows the slate, states the read, and includes an easy off-ramp",
+        "Does not fabricate a specific conference/venue (honors 'not sure yet')",
+        "The CFP draft's takeaways are concrete actions a Kafka-using attendee could apply, not generic"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Help me write a CFP. The topic is migrating a monolith to event-driven services, and I want to submit it to a regional DevOps conference. The interesting part to me is how we got the rollback story right when half the events had already fired.",
+      "expected_output": "Has topic + thesis + venue type, so skips discovery. Researches/clarifies the venue, then drafts the four CFP fields with the rollback angle as the spine. The concrete rollback detail should survive into the abstract and takeaways, not get sanded into generic 'migration best practices'.",
+      "files": [],
+      "expectations": [
+        "Does not run the topic-discovery interview",
+        "The half-fired-events rollback angle is the spine of the abstract and at least one takeaway, not flattened into generic migration advice",
+        "Produces all four canonical fields with actionable takeaways",
+        "Tailors to a regional DevOps audience (asks about or researches the specific venue rather than writing venue-agnostic copy)",
+        "Delivers a fillable copy-paste HTML page (or fills a supplied form)"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I'm running a talk-finding interview with someone and I want you to carry it through to the read and the draft. Treat the exchange below as the conversation so far (their answers arrived turn by turn). After processing it, give me (a) your running ranking of candidate topics with the signals behind each, (b) your confirm-by-action turn to the person, and (c) a first draft of the CFP fields for whichever topic you land on.\n\n--- transcript ---\nYou: Do you have a conference or kind of event in mind? Totally fine if it's 'not sure yet.'\nThem: Open to either a StaffPlus-ish internal-architecture conference or a general backend one. No strong preference.\nYou: What have you been interested in lately?\nThem: Property-based testing, honestly I went down a rabbit hole with Hypothesis a few weeks ago and I'm a little obsessed. I pointed it at our serialization layer and it found three real bugs the first afternoon — round-trip cases nobody would ever hand-write. I've been adding strategies for our internal types ever since and keep finding edge cases.\nYou: What are you working on right now?\nThem: Rewriting the read-through cache in front of our pricing service. The interesting part was making it request-coalescing so a cold start doesn't stampede the database — the dogpile problem was way nastier than I expected, there's a subtle race in how you hand back the in-flight promise. I want to write up the coalescing logic because I had to draw it out like four times before it was correct.\nYou: What's a hard problem you've been chewing on?\nThem: Honestly both of those are live for me right now. The cache one I keep wanting to document because the coalescing is genuinely subtle and I think people get it wrong. And the Hypothesis thing I just can't stop — I keep throwing it at new parts of the codebase to see what breaks.\nYou: Tell me more about whichever one's pulling harder.\nThem: That's the thing, I genuinely can't tell. The cache is more 'I built something tricky and want to explain it cleanly.' The testing one is more 'I discovered a superpower and want everyone to have it.' Both feel like talks to me.\n--- end transcript ---",
+      "expected_output": "Genuine close call: BOTH the property-based-testing thread and the request-coalescing cache thread show strong, comparable signal (concrete detail, forward motion, affect, spontaneous return to both). The correct behavior is to NOT manufacture a confident single winner. The skill says to scale stated confidence to the margin and hedge explicitly when it's close ('X edges Y, but it's close'), and to route the choice back to the person with easy alternatives. A run that confidently commits to one topic as if the other were clearly weaker is the failure mode. The confirm-by-action turn should present both as live, state the (narrow or near-tied) margin honestly, and let the person's next elaboration break the tie. Producing a draft for one is fine as long as it's framed as 'here's a starting cut on X while you decide,' not a verdict.",
+      "files": [],
+      "expectations": [
+        "Recognizes this as a genuine close call rather than declaring a confident single winner",
+        "Explicitly hedges and states the margin is narrow/near-tied (does not overclaim confidence)",
+        "Both topics are credited with real positive signals, not one artificially downgraded to justify a pick",
+        "The confirm-by-action turn routes the tie-break to the person rather than deciding for them",
+        "If a CFP draft is produced, it is framed as a provisional starting cut while the person decides, not a final verdict"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I'm running a talk-finding interview with someone and I want you to carry it through to the read and the draft. Treat the exchange below as the conversation so far (their answers arrived turn by turn). After processing it, give me (a) your running ranking of candidate topics with the signals behind each, (b) your confirm-by-action turn to the person, and (c) a first draft of the CFP fields for whichever topic you land on.\n\n--- transcript ---\nYou: Do you have a conference or kind of event in mind? Totally fine if it's 'not sure yet.'\nThem: PyCon, or honestly even a local meetup, I'm flexible.\nYou: What have you been interested in lately?\nThem: Migrating us off Zilch — that's our internal homegrown ORM-slash-service-framework. I've been completely consumed by it, it's all I think about right now. The way Zilch handles implicit transaction scoping through what we call the 'context bag' is genuinely bizarre, and untangling how it threads through the Frobnicator service has been the most fun I've had at work in months.\nYou: What are you working on right now?\nThem: Same thing, the Zilch migration. Right now I'm mapping every place the context bag opens an implicit transaction so we can make them explicit. It's like archaeology. Nobody who wrote the original Zilch internals is still here, so I'm reverse-engineering our own framework.\nYou: What's a hard problem you've been chewing on?\nThem: Getting Zilch's implicit transaction boundaries to line up with real database transactions without a six-month code freeze. That's the puzzle I fall asleep thinking about. ... Oh, separately — I did figure out a decent general approach for doing these big risky migrations incrementally, using a shadow-read comparison where you run old and new side by side and diff the results in prod. That's probably more broadly useful, honestly, but it's less of an obsession for me than the Zilch internals.\nYou: Tell me more about the Zilch internals.\nThem: Oh man, where do I start — so the context bag is this thread-local thing that... [continues at length with specifics about the internal framework]\n--- end transcript ---",
+      "expected_output": "The most-energized thread is the Zilch internals — clear, dominant signal (consumed by it, spontaneous depth, 'most fun in months,' falls asleep on the hard problem, expands eagerly on follow-up). BUT it fails the applicability filter: Zilch is a proprietary internal framework full of company-specific jargon (context bag, Frobnicator) that no external audience can use, with possible IP/NDA concerns and no standing for an outside crowd. The correct behavior is to NOT silently substitute a safer topic, and NOT naively push the un-talkable one. The skill should name the tension out loud (the thing you're most lit up by is hard to make a public talk), then try to reframe: extract the GENERAL lesson from the Zilch work — reverse-engineering an undocumented system, untangling implicit transaction boundaries, or the incremental shadow-read migration approach the person themselves flagged as broadly useful — as the talkable carrier of the same energy. The shadow-read pattern is the natural bridge. Confirm-by-action should surface this honestly and let the person weigh in.",
+      "files": [],
+      "expectations": [
+        "Identifies the Zilch internals as the highest-energy thread (does not mis-rank it as low-energy)",
+        "Explicitly names the applicability problem: Zilch is proprietary/internal/jargon-heavy with no external audience (and/or IP concerns), so it is hard to make into a public talk",
+        "Does NOT silently swap in a safer topic without explaining why",
+        "Attempts to reframe the Zilch energy into a talkable general lesson (e.g. reverse-engineering an undocumented system, taming implicit transaction boundaries) and/or surfaces the shadow-read incremental-migration pattern as the bridge",
+        "Surfaces the tension to the person in the confirm-by-action turn rather than deciding silently"
+      ]
+    }
+  ]
+}
