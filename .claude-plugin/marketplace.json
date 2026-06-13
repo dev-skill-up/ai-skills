@@ -9,13 +9,13 @@
     {
       "name": "dev-skill-up",
       "source": "./plugins/dev-skill-up",
-      "description": "An \"automated Moshe\": skills that package how Moshe approaches recurring knowledge work. Currently includes talk-finder, which helps you find a conference talk worth giving and writes CFP-ready answers.",
+      "description": "An \"automated Moshe\": skills that package how Moshe approaches recurring knowledge work. Includes talk-finder (find a conference talk worth giving and write CFP-ready answers) and meditation-video (produce a guided-meditation video with open-source TTS and ffmpeg).",
       "author": {
         "name": "Moshe Zadka",
         "email": "moshez@zadka.club"
       },
       "license": "MIT",
-      "keywords": ["conference", "cfp", "talks", "speaking", "writing"],
+      "keywords": ["conference", "cfp", "talks", "speaking", "writing", "meditation", "tts", "video", "audio"],
       "category": "productivity"
     }
   ]

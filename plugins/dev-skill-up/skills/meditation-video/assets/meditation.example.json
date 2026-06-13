@@ -1,0 +1,32 @@
+{
+  "title": "Five-Minute Mindfulness",
+  "voice": "af_heart",
+  "speed": 0.9,
+  "lang": "en-us",
+  "lead_in": 0.5,
+  "tail": 0.8,
+  "image_idea": "calm misty lake or forest at dawn, low contrast, no people",
+  "segments": [
+    { "text": "Find a position that feels comfortable, and let yourself settle into it.", "pause": 3 },
+    { "text": "You can close your eyes, or just let your gaze soften and rest on a point in front of you.", "pause": 4 },
+    { "text": "There's nothing to achieve here. Nowhere else to be for the next few minutes. Just this.", "pause": 10 },
+    { "text": "Begin to notice that you're breathing. You don't need to change it. Just notice it.", "pause": 7 },
+    { "text": "Feel where the breath is most obvious to you. Maybe the cool air at your nostrils. Maybe the rise and fall of your chest, or your belly.", "pause": 9 },
+    { "text": "Rest your attention there. On one breath.", "pause": 7 },
+    { "text": "And the next.", "pause": 16 },
+    { "text": "At some point, maybe already, you'll notice your attention has drifted. A thought, a sound, a plan for later.", "pause": 7 },
+    { "text": "That's completely fine. That's what minds do.", "pause": 5 },
+    { "text": "When you notice you've wandered, that noticing is the practice. Gently bring your attention back to the breath. No judgment. Just begin again.", "pause": 15 },
+    { "text": "Now let your awareness widen to include your whole body, sitting here.", "pause": 7 },
+    { "text": "Notice the points where you make contact with the floor, or the chair. The weight of your body being held.", "pause": 9 },
+    { "text": "If there's tension anywhere, the shoulders, the jaw, the hands, see if it can soften, just a little.", "pause": 15 },
+    { "text": "For the next while, simply rest.", "pause": 5 },
+    { "text": "You don't need to follow the breath closely now. Just sit, and be aware of whatever is here. Sounds, sensations, the breath moving on its own.", "pause": 18 },
+    { "text": "Letting everything be exactly as it is.", "pause": 32 },
+    { "text": "Begin to bring your attention back to the room around you.", "pause": 5 },
+    { "text": "Notice the sounds of the space you're in. Feel the surface beneath you.", "pause": 7 },
+    { "text": "When you're ready, let your eyes open.", "pause": 5 },
+    { "text": "Take this sense of calm with you. The breath is always here, whenever you want to return to it.", "pause": 3 },
+    { "text": "And that brings our practice to a close. The meditation is complete. When you're ready, carry this calm with you, and go gently into the rest of your day.", "pause": 0 }
+  ]
+}

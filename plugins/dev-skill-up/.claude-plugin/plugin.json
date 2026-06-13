@@ -1,6 +1,6 @@
 {
   "name": "dev-skill-up",
-  "description": "An \"automated Moshe\" — skills capturing how Moshe approaches recurring knowledge work. Includes talk-finder for finding a conference talk worth giving and drafting CFP answers.",
+  "description": "An \"automated Moshe\" — skills capturing how Moshe approaches recurring knowledge work. Includes talk-finder (finding a conference talk worth giving and drafting CFP answers) and meditation-video (producing a guided-meditation video with open-source TTS and ffmpeg).",
   "author": {
     "name": "Moshe Zadka",
     "email": "moshez@zadka.club"

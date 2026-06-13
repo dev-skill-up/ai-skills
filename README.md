@@ -11,6 +11,7 @@ Everything lives in one plugin, **`dev-skill-up`** — an "automated Moshe" that
 | Skill | What it does |
 | :---- | :----------- |
 | **talk-finder** | Interviews you to find the conference talk you're most energized to give, sanity-checks that it would land with an audience, then writes CFP-ready answers (title, abstract, description, audience takeaways). Works zero-shot too: tell it the conference, topic, and your angle and it drafts the whole thing. |
+| **meditation-video** | Makes calm narrated spoken-word videos — a warm voice over a still image, rendered as a shareable MP4, fully offline (Kokoro for the open-source voice, ffmpeg for the video, no API keys or GPU). Two modes: **guided meditations** (paced with deliberate silence) and **sleep essays** (long-form narrated deep-dives on obscure topics, written to fall asleep to). Handles the whole pipeline from writing the words with the right pacing through to the final render. |
 
 More skills will be added to the same plugin over time.
 
@@ -40,13 +41,15 @@ claude.ai and Cowork don't install from third-party marketplaces — you upload 
 
 1. Turn on **Code execution and file creation** in **Settings → Capabilities**.
 2. Go to **Customize → Skills**, click **+ → Create skill → Upload a skill**.
-3. Upload a zip of the skill folder. A prebuilt one is in [`dist/talk-finder.zip`](dist/talk-finder.zip), or build your own:
+3. Upload a zip of the skill folder. Prebuilt ones are in [`dist/`](dist/), or build your own:
 
    ```bash
-   cd plugins/dev-skill-up/skills && zip -r ../../../dist/talk-finder.zip talk-finder
+   cd plugins/dev-skill-up/skills
+   zip -r ../../../dist/talk-finder.zip talk-finder
+   zip -r ../../../dist/meditation-video.zip meditation-video
    ```
 
-   The zip must contain a top-level `talk-finder/` folder whose name matches the `name` in its `SKILL.md`.
+   Each zip must contain a top-level folder whose name matches the `name` in its `SKILL.md`.
 
 ## Use with the Claude API / Agent SDK
 
@@ -63,13 +66,18 @@ ai-skills/
 │       ├── .claude-plugin/
 │       │   └── plugin.json        # the plugin manifest
 │       └── skills/
-│           └── talk-finder/
+│           ├── talk-finder/
+│           │   ├── SKILL.md
+│           │   ├── references/
+│           │   ├── assets/
+│           │   └── evals/         # test cases used to develop the skill
+│           └── meditation-video/
 │               ├── SKILL.md
-│               ├── references/
-│               ├── assets/
-│               └── evals/         # test cases used to develop the skill
+│               ├── references/    # script craft + Kokoro/ffmpeg deep-dive
+│               └── assets/        # the pipeline scripts (setup, generate, build, render)
 └── dist/
-    └── talk-finder.zip            # prebuilt for claude.ai / Cowork upload
+    ├── talk-finder.zip            # prebuilt for claude.ai / Cowork upload
+    └── meditation-video.zip
 ```
 
 ## Adding a new skill
@@ -78,7 +86,9 @@ Drop a new `<skill-name>/SKILL.md` (plus any `references/`, `assets/`) into `plu
 
 ## A note on trust
 
-These skills are plain Markdown instructions plus, in the case of `talk-finder`, one static HTML template. No scripts, no network calls, no dependencies — nothing executes on its own. You're encouraged to read any skill before enabling it.
+`talk-finder` is plain Markdown instructions plus one static HTML template — no scripts, no network calls, nothing that executes on its own.
+
+`meditation-video` is different: it ships small, readable Python and shell scripts in its `assets/` that Claude runs as part of the pipeline. They install the open-source [`kokoro-onnx`](https://github.com/thewh1teagle/kokoro-onnx) package, download the Kokoro model weights, fetch a backdrop image, and call `ffmpeg`. Nothing runs on its own and there are no hidden network calls beyond those documented downloads — but because it does execute code and reach the network, you're especially encouraged to read the scripts before enabling it.
 
 ## License
 
