@@ -6,7 +6,7 @@ This repo doubles as a **Claude Code plugin marketplace**, so you can install ev
 
 ## What's inside
 
-Everything lives in one plugin, **`moshe`** — an "automated Moshe" that packages how I approach recurring knowledge work.
+Everything lives in one plugin, **`dev-skill-up`** — an "automated Moshe" that packages how I approach recurring knowledge work.
 
 | Skill | What it does |
 | :---- | :----------- |
@@ -18,10 +18,10 @@ More skills will be added to the same plugin over time.
 
 ```bash
 claude plugin marketplace add dev-skill-up/ai-skills
-claude plugin install moshe@ai-skills
+claude plugin install dev-skill-up@ai-skills
 ```
 
-Then just ask naturally ("help me write a CFP for PyCon", "I want to give a talk but don't know about what") or invoke a skill directly with `/moshe:talk-finder`. To get later additions, run `claude plugin marketplace update ai-skills`.
+Then just ask naturally ("help me write a CFP for PyCon", "I want to give a talk but don't know about what") or invoke a skill directly with `/dev-skill-up:talk-finder`. To get later additions, run `claude plugin marketplace update ai-skills`.
 
 You can also pin to this repo from another project's `.claude/settings.json`:
 
@@ -30,7 +30,7 @@ You can also pin to this repo from another project's `.claude/settings.json`:
   "extraKnownMarketplaces": {
     "ai-skills": { "source": { "source": "github", "repo": "dev-skill-up/ai-skills" } }
   },
-  "enabledPlugins": { "moshe@ai-skills": true }
+  "enabledPlugins": { "dev-skill-up@ai-skills": true }
 }
 ```
 
@@ -43,14 +43,14 @@ claude.ai and Cowork don't install from third-party marketplaces — you upload 
 3. Upload a zip of the skill folder. A prebuilt one is in [`dist/talk-finder.zip`](dist/talk-finder.zip), or build your own:
 
    ```bash
-   cd plugins/moshe/skills && zip -r ../../../dist/talk-finder.zip talk-finder
+   cd plugins/dev-skill-up/skills && zip -r ../../../dist/talk-finder.zip talk-finder
    ```
 
    The zip must contain a top-level `talk-finder/` folder whose name matches the `name` in its `SKILL.md`.
 
 ## Use with the Claude API / Agent SDK
 
-Skills run with the code-execution tool. Upload `dist/talk-finder.zip` as a file, or point the Python SDK's `files_from_dir` helper at `plugins/moshe/skills/talk-finder/`. See the [API skills guide](https://platform.claude.com/docs/en/build-with-claude/skills-guide).
+Skills run with the code-execution tool. Upload `dist/talk-finder.zip` as a file, or point the Python SDK's `files_from_dir` helper at `plugins/dev-skill-up/skills/talk-finder/`. See the [API skills guide](https://platform.claude.com/docs/en/build-with-claude/skills-guide).
 
 ## Repository layout
 
@@ -59,7 +59,7 @@ ai-skills/
 ├── .claude-plugin/
 │   └── marketplace.json          # the marketplace catalog
 ├── plugins/
-│   └── moshe/
+│   └── dev-skill-up/
 │       ├── .claude-plugin/
 │       │   └── plugin.json        # the plugin manifest
 │       └── skills/
@@ -74,7 +74,7 @@ ai-skills/
 
 ## Adding a new skill
 
-Drop a new `<skill-name>/SKILL.md` (plus any `references/`, `assets/`) into `plugins/moshe/skills/`. Claude Code discovers it automatically — no change to `marketplace.json` or `plugin.json` needed. Commit, and users get it on their next `marketplace update`. (Versions track git commits, so there's no version number to bump.)
+Drop a new `<skill-name>/SKILL.md` (plus any `references/`, `assets/`) into `plugins/dev-skill-up/skills/`. Claude Code discovers it automatically — no change to `marketplace.json` or `plugin.json` needed. Commit, and users get it on their next `marketplace update`. (Versions track git commits, so there's no version number to bump.)
 
 ## A note on trust
 

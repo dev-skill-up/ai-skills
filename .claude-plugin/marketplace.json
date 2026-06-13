@@ -7,8 +7,8 @@
   "description": "Moshe Zadka's collection of Claude Agent Skills.",
   "plugins": [
     {
-      "name": "moshe",
-      "source": "./plugins/moshe",
+      "name": "dev-skill-up",
+      "source": "./plugins/dev-skill-up",
       "description": "An \"automated Moshe\": skills that package how Moshe approaches recurring knowledge work. Currently includes talk-finder, which helps you find a conference talk worth giving and writes CFP-ready answers.",
       "author": {
         "name": "Moshe Zadka",
