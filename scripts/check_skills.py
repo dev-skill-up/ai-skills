@@ -7,14 +7,14 @@ Checks, per skill under plugins/*/skills/*:
     64-char limit; `description` fits the 1024-char limit
   - every references/... and assets/... path mentioned in the skill's
     Markdown files exists on disk
-  - assets/*.py compile, assets/*.sh pass `bash -n`, assets/*.json parse
+  - assets/*.py parse (syntax check), assets/*.sh pass `bash -n`,
+    assets/*.json parse
 
 Repo-level: marketplace.json and plugin.json parse, and every plugin
 `source` in the marketplace catalog exists.
 """
 import json
 import pathlib
-import py_compile
 import re
 import subprocess
 import sys
@@ -95,9 +95,9 @@ def check_skill(skill_dir):
         arel = asset.relative_to(ROOT)
         if asset.suffix == ".py":
             try:
-                py_compile.compile(str(asset), doraise=True)
-            except py_compile.PyCompileError as e:
-                err(f"{arel}: {e.msg}")
+                compile(asset.read_text(), str(asset), "exec")
+            except SyntaxError as e:
+                err(f"{arel}: {e}")
         elif asset.suffix == ".sh":
             run = subprocess.run(["bash", "-n", str(asset)],
                                  capture_output=True, text=True)
