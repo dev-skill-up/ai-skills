@@ -41,15 +41,13 @@ claude.ai and Cowork don't install from third-party marketplaces — you upload 
 
 1. Turn on **Code execution and file creation** in **Settings → Capabilities**.
 2. Go to **Customize → Skills**, click **+ → Create skill → Upload a skill**.
-3. Upload a zip of the skill folder. Prebuilt ones are in [`dist/`](dist/), or build your own:
+3. Upload a zip of the skill folder. Prebuilt ones are in [`dist/`](dist/), or rebuild them all:
 
    ```bash
-   cd plugins/dev-skill-up/skills
-   zip -r ../../../dist/talk-finder.zip talk-finder
-   zip -r ../../../dist/meditation-video.zip meditation-video
+   python3 scripts/build_dist.py
    ```
 
-   Each zip must contain a top-level folder whose name matches the `name` in its `SKILL.md`.
+   Each zip contains a top-level folder whose name matches the `name` in its `SKILL.md`. The builder is deterministic (sorted entries, fixed timestamps), and CI fails if the committed zips don't match the skill tree.
 
 ## Use with the Claude API / Agent SDK
 
@@ -82,7 +80,9 @@ ai-skills/
 
 ## Adding a new skill
 
-Drop a new `<skill-name>/SKILL.md` (plus any `references/`, `assets/`) into `plugins/dev-skill-up/skills/`. Claude Code discovers it automatically — no change to `marketplace.json` or `plugin.json` needed. Commit, and users get it on their next `marketplace update`. (Versions track git commits, so there's no version number to bump.)
+Drop a new `<skill-name>/SKILL.md` (plus any `references/`, `assets/`) into `plugins/dev-skill-up/skills/`. Claude Code discovers it automatically — no change to `marketplace.json` or `plugin.json` needed. Run `python3 scripts/build_dist.py` to refresh `dist/`, commit, and users get it on their next `marketplace update`. (Versions track git commits, so there's no version number to bump.)
+
+CI (`.github/workflows/ci.yml`) checks every push: `scripts/check_skills.py` validates SKILL.md frontmatter (name/description, naming rules, length limits), the marketplace and plugin manifests, that every `references/`/`assets/` path mentioned in a skill's Markdown exists, and that all asset scripts parse (`py_compile`, `bash -n`, JSON). It then rebuilds `dist/` and fails if the committed zips are stale.
 
 ## A note on trust
 

@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Validate skills
+        run: python scripts/check_skills.py
+
+      - name: Build dist zips
+        run: python scripts/build_dist.py
+
+      - name: Verify committed dist/ is current
+        run: |
+          git diff --exit-code -- dist/ || {
+            echo "::error::dist/ is stale — run scripts/build_dist.py and commit the result"
+            exit 1
+          }
