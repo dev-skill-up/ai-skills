@@ -43,6 +43,9 @@ AI_VOCAB = [
     # Narrated transitions — make the move, don't announce it.
     r"\b(?:jump|skip|flash|fast-forward) (?:forward|back|ahead)\b",
     r"\bbelongs here\b",
+    # Manufactured doubt — report the documented conclusion instead.
+    r"\bnever gets? resolved\b", r"\bnothing in the record\b",
+    r"\buncomfortable (?:coincidence|truth|question)\b",
 ]
 
 
