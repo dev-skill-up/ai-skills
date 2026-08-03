@@ -40,6 +40,9 @@ AI_VOCAB = [
     r"(?m)(?:^|[.!?]\s+)Sorry\b",
     # Self-commenting flourish ("Three superlatives, none of them good").
     r"\b(?:Two|Three|Four|Five) \w+s?, (?:none|all|each|neither) of (?:them|which)\b",
+    # Narrated transitions — make the move, don't announce it.
+    r"\b(?:jump|skip|flash|fast-forward) (?:forward|back|ahead)\b",
+    r"\bbelongs here\b",
 ]
 
 
