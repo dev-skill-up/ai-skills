@@ -64,6 +64,7 @@ Search **before** writing, both for inspiration and to verify specifics. The pat
 - **Combine scholar names + technical terms + discovery years.** This is the most reliable way to surface actual academic sources rather than popularizations. E.g. a site name plus an excavator's surname plus "2019"; a method's technical name plus the mathematician who reconstructed it.
 - **Go general → specific progressively.** Start wide to find the names and terms, then re-search with those to reach the primary scholarship.
 - Verify the load-bearing claims — the surprising reversal, the specific date, the mechanism — at this stage. The pitch could be a speculative hook; the essay should not be.
+- If verification collapses the story — the payoff turns out to be "nobody knows, and the records are closed" — discard the topic and pick another before writing. Generation and render time are too expensive to spend on a topic with no story.
 
 ## Essay craft
 
