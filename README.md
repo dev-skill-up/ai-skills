@@ -37,23 +37,23 @@ You can also pin to this repo from another project's `.claude/settings.json`:
 
 ## Use in claude.ai or Cowork
 
-claude.ai and Cowork don't install from third-party marketplaces — you upload a skill as a zip.
+claude.ai and Cowork don't install from third-party marketplaces — you upload a skill as a `.skill` file (a zip archive with a different extension).
 
 1. Turn on **Code execution and file creation** in **Settings → Capabilities**.
 2. Go to **Customize → Skills**, click **+ → Create skill → Upload a skill**.
-3. Upload a zip of the skill folder. Prebuilt ones are in [`dist/`](dist/), or build your own:
+3. Upload the skill's `.skill` file. Prebuilt ones are in [`dist/`](dist/), or build your own:
 
    ```bash
    cd plugins/dev-skill-up/skills
-   zip -r ../../../dist/talk-finder.zip talk-finder
-   zip -r ../../../dist/meditation-video.zip meditation-video
+   zip -r ../../../dist/talk-finder.skill talk-finder
+   zip -r ../../../dist/meditation-video.skill meditation-video
    ```
 
-   Each zip must contain a top-level folder whose name matches the `name` in its `SKILL.md`.
+   Each archive must contain a top-level folder whose name matches the `name` in its `SKILL.md`.
 
 ## Use with the Claude API / Agent SDK
 
-Skills run with the code-execution tool. Upload `dist/talk-finder.zip` as a file, or point the Python SDK's `files_from_dir` helper at `plugins/dev-skill-up/skills/talk-finder/`. See the [API skills guide](https://platform.claude.com/docs/en/build-with-claude/skills-guide).
+Skills run with the code-execution tool. Upload `dist/talk-finder.skill` as a file, or point the Python SDK's `files_from_dir` helper at `plugins/dev-skill-up/skills/talk-finder/`. See the [API skills guide](https://platform.claude.com/docs/en/build-with-claude/skills-guide).
 
 ## Repository layout
 
@@ -76,8 +76,8 @@ ai-skills/
 │               ├── references/    # script craft + Kokoro/ffmpeg deep-dive
 │               └── assets/        # the pipeline scripts (setup, generate, build, render)
 └── dist/
-    ├── talk-finder.zip            # prebuilt for claude.ai / Cowork upload
-    └── meditation-video.zip
+    ├── talk-finder.skill          # prebuilt for claude.ai / Cowork upload
+    └── meditation-video.skill
 ```
 
 ## Adding a new skill
