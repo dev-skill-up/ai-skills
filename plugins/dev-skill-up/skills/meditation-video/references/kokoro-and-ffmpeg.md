@@ -89,6 +89,61 @@ Why each piece:
 
 If a render ever times out, the lever is **frame rate first** (drop `--fps`), then preset. Don't reach for higher fps on a still image — there's no motion to smooth.
 
+## The slideshow render (casual essays)
+
+`render_slideshow.py` renders a casual essay's ~30 shots in **one ffmpeg pass**: N looped image inputs → per-input `crop` (the slow pan/tilt) → an `xfade` chain (the dissolves) → mux the narration. Not two passes; one encode of 20 minutes is enough work. Numbers below are measured from a real 20-minute run.
+
+### Use a constant-size `crop` with time expressions, not `zoompan`
+
+Measured on identical content: `zoompan` took 19 s to encode 10 s of video; `crop` took 6.8 s. **Three times faster and pixel-sharp**, because there is no per-frame rescale. The plate is pre-scaled once (by `make_plates.py`) to cover the frame with ~12% margin, and the renderer crops a moving 1920×1080 window out of it:
+
+```
+crop=1920:1080:x='X0 + RATE*t':y='Y0'
+```
+
+The travel rate is capped at ~32 px/s (`span = min(slack, MAX_RATE * duration)`, centred on the leftover slack), and a plate that is effectively frame-sized is forced static — gate on plate size, not just a flag: `if static or (w <= 1930 and h <= 1090)`.
+
+### The xfade math
+
+With `X` = crossfade duration and `t_k` = shot k's start time (derived from the real WAV durations, never a clock):
+
+- clip `k` runs **`d_k + X`** seconds (the last one `d_k + X/2`), where `d_k = t_{k+1} − t_k`;
+- transition `k` sits at **`offset = t_k − X/2`** so the dissolve straddles the sentence boundary.
+
+Each xfade offset is expressed in the accumulated output timeline, which is why the clips need the extra `X` of tail — shot k must survive from its own dissolve-in (starting at `t_k − X/2`) through its dissolve-out (ending at `t_{k+1} + X/2`).
+
+### Settings and cost
+
+What worked: **20 fps** (slideshow, no real motion), `-preset veryfast -crf 21`, `xfade` 1.6 s, video fade in 2 s / out 3 s, audio fade out 3 s.
+
+**Cost: ~1.15× realtime.** A 20-minute video takes ~23 minutes to render. Budget for it and start it before writing the credits.
+
+For delivery under a 30 MB cap, a two-pass `-preset medium -b:v 125k` + `-b:a 40k -ac 1` re-encode brought 133 MB (CRF 21 master) down to 25 MB for 20:25 — exact commands and the verify steps in `references/casual-essay.md`.
+
+## Killing a render without corrupting it
+
+> **GOTCHA — `pkill -f render_video.py` does not kill ffmpeg.** The child's command line is `ffmpeg`, not the script name. It survives, keeps writing to the same output path, and if you start a replacement render you get two encoders interleaving into one file. The result is a plausible-looking MP4 with `Invalid NAL unit size` throughout. Use `pkill -x ffmpeg`, and check `ps -eo comm | grep -cx ffmpeg` is 1 after starting a render.
+
+> **GOTCHA — `pkill -9 -f ffmpeg` kills your own shell**, because the bash `-c` wrapper's command line contains the string "ffmpeg". Always `-x`.
+
+## Verifying output: ffprobe is not enough
+
+> **GOTCHA — `ffprobe` will not detect a corrupt file.** It reported correct duration, dimensions and codecs for a file that was unplayable. Only a full decode finds it:
+>
+> ```bash
+> ffmpeg -v error -i out.mp4 -f null -    # silence = clean
+> ```
+>
+> Run it on both master and compressed output, every time.
+
+## SVG diagrams via cairosvg
+
+Casual-essay diagrams are SVG rendered to 1920×1080 PNG with `cairosvg` (design guidance in `references/casual-essay.md`). Two traps:
+
+> **GOTCHA — cairosvg does not honour CSS font fallback lists.** `font-family="Charter, 'Bitstream Charter', serif"` silently renders in a sans-serif, because it takes the first token and gives up. Use one exact family name that `fc-list` shows: `"Bitstream Charter"`, `"DejaVu Serif"`.
+
+> **GOTCHA — always render every SVG to PNG and actually look at it.** A first pass of 7 diagrams had labels colliding with an axis, ticks pointing at the wrong words, overlapping city names, text overflowing a box, a caption buried under a graphic, and multiple spaces collapsed (use the `letter-spacing` attribute, never padded spaces). None of it was visible from the code.
+
 ## Pipeline data flow
 
 ```
@@ -98,3 +153,5 @@ meditation.json ──> build_audio.py ─────────────�
                                                                  │
 image.jpg ──────> render_video.py ───────────────────────────────┴──> meditation.mp4
 ```
+
+A casual essay swaps the last line for the slideshow path (`make_plates.py` → `render_slideshow.py` → `make_metadata.py`); that flow is drawn at the end of `references/casual-essay.md`.
