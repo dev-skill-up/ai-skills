@@ -32,6 +32,9 @@ AI_VOCAB = [
     r"\bevery(?:body|one) knows\b", r"\bthis is not that\b",
     # Narrator guesses — keep the fact, drop the speculation.
     r"\bmy guess\b", r"\bone suspects\b", r"\bnobody (?:writes down|knows) why\b",
+    # Negation transitions ("Not to the crash. To a foundry…") — the
+    # sentence-initial anchor keeps ordinary mid-sentence "not to" out.
+    r"(?m)(?:^|[.!?]\s+)Not (?:to|the|that)\b",
 ]
 
 
