@@ -8,9 +8,7 @@ Deliverables for a run: the essay Markdown (as an artifact), the MP4, and the pu
 
 ## The words
 
-### No story, no essay
-
-Decide after research, before writing a word: if the central question closes with "the records were never released" — no mechanism, no reversal, nothing resolved and no open question with real stakes — there is no story. Discard the topic. The pipeline makes sunk-cost pushes expensive (~23 min of render, image sourcing, diagram passes), and no amount of production rescues a topic whose payoff is a shrug. Replacing a discarded topic is not a free pick: generate 50 fresh candidates and choose from them, exactly like the original selection (the pitch workflow in `references/sleep-essay-craft.md`).
+Topic selection, research strategy, the kill criterion ("no story, no essay"), and the six hard house rules are shared with the sleep essay — **read `references/essay.md` first**. This section covers only what is casual-specific.
 
 ### Settings that actually worked
 
@@ -32,20 +30,11 @@ At `speed 1.0` with those pauses: **2,999 words → 20:25** (1,025 s speech + 20
 
 ### Register
 
-Awake listener. Wry, argumentative, willing to leave disputes unresolved. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud.
-
-Six hard rules, enforced in the ai-tells passes (`references/ai-tells.md`):
-
-- **No first person, at all.** The `tell_metrics.py` first-person count must read 0. This also kills the hedge register that rides on it — "I have heard", "I don't understand", "I always assumed". Say what is established, flatly. If a persistent rumor genuinely matters, attribute it to where it lives ("the New York Times described it as X") and then correct it — and do even that only when the correction is load-bearing. Most false claims deserve no airtime at all: leaving them out is the improvement.
-- **Never narrate what the essay is not.** No "everybody knows the famous version…", no "this is not that story", no naming an adjacent topic just to wave it away — and no negation transitions either ("Not to the crash. To a foundry in Ohio." — go straight to the foundry). Excise these framings; do not reword them. What remains should be what is actually in the essay.
-- **No guesses.** "Nobody writes down why two and not three; my guess is cost" — remove. State the fact ("it's two"); if research turned up an interesting reason why, add the reason; if not, move on. Speculation is not depth. Same for second-guessing documented conclusions: if investigators concluded the two forgings were not swapped, that is the fact, in one sentence. Doubt needs a citable source that disputes the conclusion, not an "uncomfortable coincidence" mood.
-- **Fix the structure; never narrate the fixing.** "…which should have been flagged ten minutes ago. Sorry." means the introduction is in the wrong place — move it. Editing failures are not content. The same goes for the moves themselves: "Jump forward nineteen years for a second, because there is a number that belongs here and nowhere else" is a transition apologizing for existing — just make it ("Nineteen years later, they would find…"). Editorial asides ("a rotten name") follow the same rule as guesses: if the name confuses people in practice, cite where that is documented; otherwise cut the judgment and just explain the concept.
-- **Say it plainly.** "Most stable, least likely to dissolve, most common. Three superlatives, none of them good" — a drumroll admiring its own rhetoric. State the fact once, in a plain sentence. A line that exists for its sound rather than its content gets cut. No metanarration either: "As to why nobody saw it, the Board's best reconstruction is almost stupidly mundane" announces the question and grades the answer before giving it. Write "The Board's best reconstruction is…" — if it is mundane, the mundanity will show.
-- **The essay never mentions itself.** "That is the only sentence in this episode about that, and it is the reason there is an episode" — the essay defending its own scope. Cut it; the content stands on its own. No "this episode", no "this essay", no defending restraint or tangents — if a tangent needs a defense, cut the tangent. No pacing commentary either ("this is the part where…, so I will be quick") — if a section drags, shorten it.
+Awake listener. Wry, argumentative, willing to leave disputes unresolved. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud. The six hard house rules in `references/essay.md` apply in full.
 
 ### Before any audio
 
-Run the AI-tell removal procedure (`references/ai-tells.md`) and the independent fact-check pass it describes. Multi-pass, with the metrics script, on the finished draft — not a single "polish" prompt. Both matter more at documentary register than at sleep register, because the listener is awake and paying attention.
+Run the AI-tell removal procedure and fact-check per `references/essay.md` — multi-pass with the metrics script, not a single "polish" prompt. Both matter more at documentary register than at sleep register, because the listener is awake and paying attention.
 
 ## Visuals
 

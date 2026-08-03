@@ -42,13 +42,7 @@ These convey the scholarly angle and a recent development in 2–3 sentences, in
 
 ## The workflow
 
-1. **Pitch a batch.** When asked for ideas, produce a numbered list of **50** pitches, each a 2–3 sentence hook in the register above. Pitches can be speculative — verification happens later — but each must promise lore, not just oddity. Spread them across the domains.
-2. **Selection.** The person picks one (or asks for another batch).
-3. **Research the chosen topic** before writing (see below).
-4. **Write the full essay** as a Markdown artifact.
-5. **Render to video** via the pipeline (see "Feeding the pipeline").
-
-**If a topic is discarded** (research collapsed the story, or it fails for any other reason), do not quietly substitute a favorite: go back to step 1 — generate 50 fresh candidates and choose from them, exactly as at the start.
+The topic workflow — pitch a batch of 50, selection, research, write, render, and the restart-on-discard rule — is shared with the casual essay and lives in `references/essay.md`. For sleep-essay pitches, the register is the lore criterion above: each pitch must promise lore, not just oddity, spread across the domains.
 
 ### Don't repeat covered topics
 
@@ -60,13 +54,7 @@ Keep this list current as new essays are finished.
 
 ## Research strategy
 
-Search **before** writing, both for inspiration and to verify specifics. The patterns that work:
-
-- **Many targeted queries beat one broad one.** Fire several narrow searches rather than a single general one.
-- **Combine scholar names + technical terms + discovery years.** This is the most reliable way to surface actual academic sources rather than popularizations. E.g. a site name plus an excavator's surname plus "2019"; a method's technical name plus the mathematician who reconstructed it.
-- **Go general → specific progressively.** Start wide to find the names and terms, then re-search with those to reach the primary scholarship.
-- Verify the load-bearing claims — the surprising reversal, the specific date, the mechanism — at this stage. The pitch could be a speculative hook; the essay should not be.
-- If verification collapses the story — the payoff turns out to be "nobody knows, and the records are closed" — discard the topic before writing. Generation and render time are too expensive to spend on a topic with no story. Replacing it means a fresh batch of 50 candidates and a proper selection (see "The workflow"), not reaching for a pet topic.
+The research patterns and the kill criterion ("no story, no essay") are shared with the casual essay — see `references/essay.md`. Search before writing, verify the load-bearing claims, and if verification collapses the story, discard the topic and restart the shared topic workflow.
 
 ## Essay craft
 
@@ -75,7 +63,7 @@ Search **before** writing, both for inspiration and to verify specifics. The pat
 - **Structure the journey, not the document.** Open with a concrete, intriguing entry point (an object, a moment, a puzzle). Move into the discovery narrative and the technical substance. Air the scholarly debate. Close on the resonant insight that recasts the whole thing.
 - **Calm, even register.** Long, smooth sentences. Few exclamations. Nothing jarring or suspenseful enough to wake someone — the goal is absorbing, not gripping. Curiosity, not cliffhangers.
 - **Write for the ear.** Spell out symbols and numbers as words where a reader would stumble; prefer commas and periods to dashes and parentheticals; avoid constructions that only parse on the page (tables, footnotes, "see above").
-- **De-AI the draft before recording it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside — kicker paragraphs, comma-codas, name density, a narrator who never falters. Run the multi-pass procedure in `references/ai-tells.md`, re-measuring with `assets/tell_metrics.py` after each pass, and run the independent fact-check it describes. The hard register rules there apply to sleep essays exactly as to casual ones: no first person at all (no "I have heard" hedges — attribute a rumor to its real source or omit it), no narrating what the essay is not (including negation transitions), no guesses, no narrating the draft's own failures or its structural moves (a misplaced introduction gets moved, not apologized for; a time-jump is made, not announced; a question is answered, not announced and pre-graded), no unearned editorial judgments, no second-guessing documented conclusions without a citable source that disputes them, and the essay never mentions itself ("this essay", "the only sentence about…" — the content stands on its own). Do this on the Markdown, before `essay_to_segments.py` — fixing prose after generation wastes all the TTS compute.
+- **De-AI the draft before recording it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside — kicker paragraphs, comma-codas, name density, a narrator who never falters. Run the multi-pass procedure in `references/ai-tells.md`, re-measuring with `assets/tell_metrics.py` after each pass, and run the independent fact-check it describes. The six hard house rules in `references/essay.md` apply to sleep essays exactly as to casual ones. Do this on the Markdown, before `essay_to_segments.py` — fixing prose after generation wastes all the TTS compute.
 
 ## Feeding the pipeline
 
