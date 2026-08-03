@@ -25,6 +25,11 @@ AI_VOCAB = [
     r"\bmyriad\b", r"\bplethora\b", r"\bmultifaceted\b", r"\bintricate\b",
     r"\bit is worth noting\b", r"\bin conclusion\b", r"\bstark reminder\b",
     r"\brich history\b", r"\bnot just\b[^.!?]*\bbut\b",
+    # Unattributed rumor hedges — attribute to a real source or omit.
+    r"\bit is said\b", r"\bsome say\b", r"\blegend has it\b",
+    r"\brumou?r has it\b",
+    # Narrating what the essay is not — excise, don't reword.
+    r"\bevery(?:body|one) knows\b", r"\bthis is not that\b",
 ]
 
 

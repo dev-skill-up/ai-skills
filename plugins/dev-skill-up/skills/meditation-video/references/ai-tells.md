@@ -38,6 +38,7 @@ Run `assets/tell_metrics.py essay.md` after every pass. Before → after from th
 | `In YEAR, NAME VERBed` | 5 | 1 | ≤ 2 |
 | Named individuals | 28 | ~20 | < 1 per 150 words |
 | Sentences carrying no fact ("slack") | 2 | 6 | ≥ 4 |
+| First person | 2 | 25 | **0** |
 | AI vocabulary hits | — | 0 | 0 |
 
 The script measures everything grep-able in that table (plus sentence openers, which expose repeated frames). Named individuals and slack sentences are judgment calls — count them in the pass-3 review, don't pretend a regex can.
@@ -45,16 +46,18 @@ The script measures everything grep-able in that table (plus sentence openers, w
 ## The structural tells worth naming explicitly
 
 - **The repeating analytical unit.** "Term → scholar A reads it X → scholar B reads it Y → unresolved" ran **8 times**, and the same two scholars were staged as a matched pair **5 times**. Fix: introduce the recurring cast *once*, then either assert one reading flatly or refer to them generically. Keep 3 disputes, the ones with the best evidence and the highest stakes.
-- **Outline order.** Discovery → language → method → content → object → provenance → conservation → conclusion is a filing cabinet, not a train of thought. Add 2–3 deliberate disruptions: move a description to the scene where someone is physically holding the thing; let a fact that invalidates earlier facts barge in early and get abandoned ("flag on that, I'll come back to it"); move context to where it is needed rather than where it tidies up.
+- **Outline order.** Discovery → language → method → content → object → provenance → conservation → conclusion is a filing cabinet, not a train of thought. Add 2–3 deliberate disruptions: move a description to the scene where someone is physically holding the thing; let a fact that invalidates earlier facts barge in early and get abandoned, then picked back up where it lands; move context to where it is needed rather than where it tidies up.
 - **Zero slack.** 2 of 169 sentences carried no fact. Real speech has clauses that exist only to reach the next one. Add 3–4.
 - **Name density.** 28 named people in 2,950 words, nearly all mentioned once with a credential appositive and a date. Nobody talking remembers that many.
-- **The narrator never fails.** Add genuine friction: not understanding something he just said, a name he hesitates over, admitting a section bores him, getting a fact wrong and catching himself, an abandoned thread, a belated gloss ("sorry, I should have said…"). Give him one real error to correct.
+- **The narrator never fails.** Add genuine friction — but never first-person friction; first person is banned outright (see the over-correction section). The friction lives in the structure instead: a gloss that lands two paragraphs after the term needed it, an abandoned thread picked back up late, a stated fact corrected in the open a sentence later, a section that visibly loses patience with its own subject and moves on.
+- **Narrating what the essay is not.** "Everybody knows that crash… It is as good as people say, and this is not that story." Appealing to what "everybody knows", or naming an adjacent famous topic just to wave it off, is throat-clearing borrowed from someone else's essay. **Excise it, do not replace it** — no subtler rewording. What remains should be only what is actually in the essay.
+- **The unattributed rumor.** "I have heard", "it is said", "some say", "legend has it". Either the claim is established — then state it flatly — or it is a persistent rumor worth engaging, in which case point at where it actually lives ("the New York Times described it as X") and correct it, and do even that only when the correction is load-bearing. Usually the right move is to not mention the false version at all.
 - **Tonal monotony.** The deepest tell: one attitude applied to everything at identical strength. A death, a joke, a paywalled paper and a cat's head in a wreath all delivered at the same wry, level pitch. A human loses the register somewhere.
 - **The composed ending.** Four fragments in descending length with the strangest item last is a drumroll. Consider moving that material to where a person would naturally mention it, and ending on something genuinely unresolved instead.
 
 ## Warn about over-correction
 
-Adding friction, the source run pushed first-person from 2 to 25 instances — which is just a different tic. **Re-measure what you added, not only what you removed.** Targets: ~8–12 first-person moments per 3,000 words, spread out, never three in one paragraph. Same for "And"-initial sentences, fragments, and self-correction.
+Adding friction, the source run pushed first-person from 2 to 25 instances — which is just a different tic, and one the house style now bans outright. **First person is excised entirely: the `tell_metrics.py` first-person count must read 0.** Friction comes from structure (late glosses, abandoned threads, open corrections), never from a narrator persona. **Re-measure what you added, not only what you removed.** The same watch applies to "And"-initial sentences, fragments, and self-correction.
 
 ## Narration-specific
 
