@@ -1,19 +1,12 @@
 # Sourcing images honestly
 
-A single calm backdrop for a meditation or sleep essay is easy: an Unsplash CDN direct URL or `picsum.photos` via `assets/fetch_image.sh` is fine. A **casual essay is a different problem** — ~30 topical images, each of which must actually show what the narration claims, at a licence the person can publish under. This file is that discipline, learned on a real documentary run.
+A single calm backdrop for a meditation or sleep essay is easy: an Unsplash CDN direct URL or `picsum.photos` via `assets/fetch_image.sh` is fine. A **casual essay is a different problem** — ~30 topical images, each of which must actually show what the narration claims, each carrying **no licence obligation whatsoever**. This file is that discipline, learned on a real documentary run.
 
-## Ask about the licence tier before sourcing anything
+## Tier A — "no obligation" — is the ONLY allowable tier
 
-This is the single most expensive thing to get wrong — it means re-sourcing every image and re-rendering. Ask up front, and treat these as four distinct tiers:
+**Every image must be tier A: Public Domain, PD-old, PD-US, PD-art, CC0, or a US federal work. These licences carry zero obligation — no attribution requirement, no share-alike, no restriction of any kind — and nothing else is ever acceptable.** There is no lower tier in this pipeline: any licence that carries any obligation at all is rejected on sight. This is a fixed policy, not a preference — do **not** ask the user about licensing, and do not weigh an obligation-carrying image "just this once". Sourcing runs fully autonomously on this rule.
 
-| Tier | Includes | Obligation |
-|---|---|---|
-| **A** | Public Domain, PD-old, PD-US, PD-art, CC0, US federal works | **none** |
-| **B** | CC BY | attribution required |
-| **C** | CC BY-SA | attribution + share-alike |
-| **D** | CC BY-NC, ND, "editorial use only", NoC-NC | unusable commercially |
-
-"Free for commercial use" usually means tier A only. A user who says "no share-alike" may also mean no attribution obligation — ask which. **Credit generously regardless**; the obligation and the courtesy are different things (see `references/publishing-metadata.md` for the credit format).
+Getting this wrong is the single most expensive mistake in the run — it means re-sourcing every image and re-rendering. "Free for commercial use" on a stock site does **not** make an image tier A; only the licence string itself does. **Credit generously anyway**; zero obligation and the courtesy of credit are different things (see `references/publishing-metadata.md` for the credit format).
 
 ## The technique that makes tier A possible
 

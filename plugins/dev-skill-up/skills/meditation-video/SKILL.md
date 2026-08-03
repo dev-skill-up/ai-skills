@@ -21,12 +21,12 @@ The pipeline steps below are written for a meditation; the **"Sleep essays"** an
 
 If the person only wants *the script* (the words), you can write that directly — see the matching craft reference — and skip the audio/video machinery. Run the full pipeline when they want a produced artifact: narrated audio or a video.
 
-Gather a few specifics first (don't over-ask — most have a quick answer):
+Settle a few specifics from the request itself — **do not stop to ask the user questions; this skill runs completely autonomously**. Take what the request already says and fall back to the defaults below:
 
 - **Length** — 5 minutes is the meditation default; essays run 15–25+.
 - **Theme/style** — mindfulness/breath, body scan, sleep, loving-kindness, anxiety relief — or, for essays, the topic and the register.
 - **Voice** — female or male, and any accent. Default `af_heart` (American female) is the warmest. Full roster in `references/kokoro-and-ffmpeg.md`.
-- **Backdrop** — a vibe for the still image (misty lake, night sky, candle). For a casual essay, ask about the **image licence tier instead** — see `references/image-sourcing.md`; getting this wrong means re-sourcing everything.
+- **Backdrop** — a vibe for the still image (misty lake, night sky, candle). For a casual essay there is no licence question to ask: **tier A (no obligation) is the only allowable tier, always** — see `references/image-sourcing.md`.
 - **Audio-only or video** — some people just want the MP3/WAV.
 
 ## The pipeline
@@ -139,7 +139,7 @@ The flow:
 
 A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, three differences — normal speaking speed, many images instead of one, and original diagrams. **Read `references/casual-essay.md` first**; it carries the measured numbers (length calibration, shot cadence, render cost) and the gotchas that silently produce wrong-looking-right results. The flow, briefly:
 
-1. **Ask the licence tier**, then research and write **2,900–3,600 words** for a 20–25 minute video (`references/image-sourcing.md`, `references/casual-essay.md`).
+1. **Research and write 2,900–3,600 words** for a 20–25 minute video (`references/casual-essay.md`). Image licensing is fixed and never asked about: **tier A (no obligation) only** (`references/image-sourcing.md`).
 2. **De-AI and fact-check** the script (`references/ai-tells.md`) before generating audio.
 3. **Segments at speed 1.0**: `essay_to_segments.py --speed 1.0 --sentence-pause 0.6 --paragraph-pause 2.2 --lead-in 0.5 --tail 4`, then bump the title segment's pause to ~2.8. Generate and build audio as usual.
 4. **Source ~30 images and build ~7 diagrams**, verify every licence (`references/image-sourcing.md`), make plates with `assets/make_plates.py`.
@@ -151,7 +151,7 @@ A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, thre
 - `references/meditation-script-craft.md` — guided-meditation words and silence: structure, pacing, audience, sources.
 - `references/sleep-essay-craft.md` — sleep-essay craft: the "lore" criterion, topic domains and examples, the pitch/research workflow, topics already covered, and writing prose for the ear.
 - `references/casual-essay.md` — the awake documentary: register, measured length calibration, shot cadence and selection, plate styles, diagram craft, render settings and costs, delivery under the size cap.
-- `references/image-sourcing.md` — sourcing 30 topical images honestly: the four licence tiers (ask first!), tier-A techniques, verified sources, Commons API resolution, SHA-1 provenance checks, and what to do when no honest image exists.
+- `references/image-sourcing.md` — sourcing 30 topical images honestly: tier A (no obligation) as the only allowable tier — never ask — plus tier-A techniques, verified sources, Commons API resolution, SHA-1 provenance checks, and what to do when no honest image exists.
 - `references/ai-tells.md` — removing machine-written tells from essay prose: the four-pass procedure, `assets/tell_metrics.py` with measured targets, the structural tells, over-correction, narration-specific rules, and the fact-check pass.
 - `references/publishing-metadata.md` — the required description/chapters/tags deliverables: structure, hard limits, credit rules, and generating it all from the shot list so it never drifts.
 - `references/kokoro-and-ffmpeg.md` — the technical layer: Kokoro ONNX setup, the full voice roster, the still render and the slideshow render (crop-vs-zoompan, xfade math, render costs), process-kill and verification gotchas, cairosvg gotchas.
