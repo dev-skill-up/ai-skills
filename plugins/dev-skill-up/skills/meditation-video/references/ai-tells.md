@@ -10,16 +10,19 @@ Run this procedure on every researched essay — sleep or casual — after the d
 - Pass 2 cut paragraph-final zingers "from 31 to 6" — except the metric only counted multi-sentence paragraphs and missed standalone one-line paragraphs, which are the same tic with a spotlight on it. True figure: **31 of 53 paragraphs, 58%**.
 - Pass 3 found that the kicker had not died at all. It had **swapped its full stop for a comma**: 43 sentences ran `[long clause], and [short flat coda]`, 20 of them paragraph-final. "…and he bought a body." "…and he said so." "…and it has gone almost unread." Same shrug, twenty times, on a metronome.
 
-So: **run at least four passes, each hunting different ground, and re-measure after every one.** Tell each reviewer explicitly what earlier passes already fixed, or it will hand back the same list.
+So: **run at least five passes, each hunting different ground, and re-measure after every one.** Tell each reviewer explicitly what earlier passes already fixed, or it will hand back the same list.
 
 ## Pass structure
 
 1. **Lexical + mechanical.** Word blocklist, em dashes, curly quotes, negative parallelism (`not just X but Y`), participial tails (`, ...ing [significance]`). Grep-able. Do it fast, don't linger.
 2. **Rhythm and cadence.** Kicker paragraphs, the comma-coda, sentence-length variance, repeated syntactic frames. This is where most of the tell lives.
 3. **Structure and register.** Repeating analytical units, outline-shaped order, information density, name density, narrator infallibility, tonal monotony.
-4. **Verify.** Re-run every metric; check you did not over-correct.
+4. **Comprehension (cold listener).** Every concept the essay leans on, explained by the time it is used. "Heat it past eight hundred and eighty degrees and it rearranges into a cube, which is beta" — beta *what*? The writer knows; nobody listening does. Each flag gets one of two fixes: explain the term at first use, or cut it if it is not earning its place. Renaming it or hand-waving past it is not a fix.
+5. **Verify.** Re-run every metric; check you did not over-correct.
 
 Run passes 2 and 3 as **adversarial subagent reviews** with a brief that says *assume the text is still machine-written and find what survived*. Ask for 25–40 concrete items with quote / problem / replacement, and ask flat out: **"if a skilled reader saw this cold, what would tip them off first?"** The best single finding of the whole source project came from that question.
+
+Run pass 4 as its own subagent with the opposite brief: *you know nothing about this subject; read linearly and flag every term, name, or concept you are expected to already understand at the point it appears*. Do not reuse the adversarial reviewers — they have read the essay too many times to notice what it never said.
 
 ## Metrics, with targets (per ~3,000 words)
 
@@ -69,7 +72,7 @@ Spoken text fails differently. Include in the passes:
 - attribution before the claim, not after;
 - name the noun instead of "this" or "these";
 - long lists of foreign words are unlistenable — cut to three and say so;
-- gloss some terms and not others, and gloss one late.
+- gloss some terms and not others, and gloss one late — texture, not omission: a gloss may arrive late, but every concept the essay leans on gets one (that is what pass 4 checks).
 
 ## Factual verification
 
