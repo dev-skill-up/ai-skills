@@ -35,6 +35,11 @@ AI_VOCAB = [
     # Negation transitions ("Not to the crash. To a foundry…") — the
     # sentence-initial anchor keeps ordinary mid-sentence "not to" out.
     r"(?m)(?:^|[.!?]\s+)Not (?:to|the|that)\b",
+    # Performed failure — fix the draft, don't narrate the fixing.
+    r"\bshould have (?:been )?(?:said|mentioned|flagged|introduced|explained)\b",
+    r"(?m)(?:^|[.!?]\s+)Sorry\b",
+    # Self-commenting flourish ("Three superlatives, none of them good").
+    r"\b(?:Two|Three|Four|Five) \w+s?, (?:none|all|each|neither) of (?:them|which)\b",
 ]
 
 

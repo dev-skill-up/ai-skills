@@ -30,11 +30,13 @@ At `speed 1.0` with those pauses: **2,999 words → 20:25** (1,025 s speech + 20
 
 Awake listener. Wry, argumentative, willing to leave disputes unresolved. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud.
 
-Three hard rules, enforced in the ai-tells passes (`references/ai-tells.md`):
+Five hard rules, enforced in the ai-tells passes (`references/ai-tells.md`):
 
 - **No first person, at all.** The `tell_metrics.py` first-person count must read 0. This also kills the hedge register that rides on it — "I have heard", "I don't understand", "I always assumed". Say what is established, flatly. If a persistent rumor genuinely matters, attribute it to where it lives ("the New York Times described it as X") and then correct it — and do even that only when the correction is load-bearing. Most false claims deserve no airtime at all: leaving them out is the improvement.
 - **Never narrate what the essay is not.** No "everybody knows the famous version…", no "this is not that story", no naming an adjacent topic just to wave it away — and no negation transitions either ("Not to the crash. To a foundry in Ohio." — go straight to the foundry). Excise these framings; do not reword them. What remains should be what is actually in the essay.
 - **No guesses.** "Nobody writes down why two and not three; my guess is cost" — remove. State the fact ("it's two"); if research turned up an interesting reason why, add the reason; if not, move on. Speculation is not depth.
+- **Fix the structure; never narrate the fixing.** "…which should have been flagged ten minutes ago. Sorry." means the introduction is in the wrong place — move it. Editing failures are not content. Editorial asides ("a rotten name") follow the same rule as guesses: if the name confuses people in practice, cite where that is documented; otherwise cut the judgment and just explain the concept.
+- **Say it plainly.** "Most stable, least likely to dissolve, most common. Three superlatives, none of them good" — a drumroll admiring its own rhetoric. State the fact once, in a plain sentence. A line that exists for its sound rather than its content gets cut.
 
 ### Before any audio
 
