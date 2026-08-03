@@ -49,6 +49,8 @@ AI_VOCAB = [
     # Metanarration — answer the question, don't announce and pre-grade it.
     r"(?m)(?:^|[.!?]\s+)As (?:to|for) why\b",
     r"\b(?:stupidly|absurdly|laughably|comically) (?:mundane|simple|banal|small|ordinary|boring)\b",
+    # The essay talking about itself — it is about its subject, never itself.
+    r"\bthis (?:episode|essay|video)\b", r"\bonly sentence\b",
 ]
 
 
