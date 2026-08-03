@@ -11,7 +11,7 @@ Everything lives in one plugin, **`dev-skill-up`** — an "automated Moshe" that
 | Skill | What it does |
 | :---- | :----------- |
 | **talk-finder** | Interviews you to find the conference talk you're most energized to give, sanity-checks that it would land with an audience, then writes CFP-ready answers (title, abstract, description, audience takeaways). Works zero-shot too: tell it the conference, topic, and your angle and it drafts the whole thing. |
-| **meditation-video** | Makes calm narrated spoken-word videos — a warm voice over a still image, rendered as a shareable MP4, fully offline (Kokoro for the open-source voice, ffmpeg for the video, no API keys or GPU). Two modes: **guided meditations** (paced with deliberate silence) and **sleep essays** (long-form narrated deep-dives on obscure topics, written to fall asleep to). Handles the whole pipeline from writing the words with the right pacing through to the final render. |
+| **meditation-video** | Makes narrated spoken-word videos — a warm voice over still imagery, rendered as a shareable MP4, fully offline (Kokoro for the open-source voice, ffmpeg for the video, no API keys or GPU). Three modes: **guided meditations** (paced with deliberate silence), **sleep essays** (long-form narrated deep-dives on obscure topics, written to fall asleep to), and **casual essays** (awake documentaries — many licence-verified images, original diagrams, slow pans and dissolves, plus YouTube description/chapters/tags). Handles the whole pipeline from writing the words with the right pacing through to the final render. |
 
 More skills will be added to the same plugin over time.
 

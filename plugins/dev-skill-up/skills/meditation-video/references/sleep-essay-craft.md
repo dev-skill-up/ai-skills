@@ -72,6 +72,7 @@ Search **before** writing, both for inspiration and to verify specifics. The pat
 - **Structure the journey, not the document.** Open with a concrete, intriguing entry point (an object, a moment, a puzzle). Move into the discovery narrative and the technical substance. Air the scholarly debate. Close on the resonant insight that recasts the whole thing.
 - **Calm, even register.** Long, smooth sentences. Few exclamations. Nothing jarring or suspenseful enough to wake someone — the goal is absorbing, not gripping. Curiosity, not cliffhangers.
 - **Write for the ear.** Spell out symbols and numbers as words where a reader would stumble; prefer commas and periods to dashes and parentheticals; avoid constructions that only parse on the page (tables, footnotes, "see above").
+- **De-AI the draft before recording it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside — kicker paragraphs, comma-codas, name density, a narrator who never falters. Run the multi-pass procedure in `references/ai-tells.md`, re-measuring with `assets/tell_metrics.py` after each pass, and run the independent fact-check it describes. Do this on the Markdown, before `essay_to_segments.py` — fixing prose after generation wastes all the TTS compute.
 
 ## Feeding the pipeline
 
@@ -95,3 +96,4 @@ Differences from a meditation render, worth setting deliberately:
 - **No wake-up ending.** A meditation ends by telling the listener to return to their day; a sleep essay must *not*. Let it simply conclude and trail off. Use a longer audio fade-out so it dissolves rather than stops: `render_video.py ... --audio-fade-out 4`.
 - **Image:** a dark, dim, low-stimulation backdrop (night sky, dark water, candlelight) so a phone screen left on doesn't light up the room.
 - **Generation is the long pole.** Tens of minutes of audio is a lot of TTS; on CPU it's several minutes of compute. The generator is resumable, so just run it repeatedly until every segment is on disk.
+- **The video is not the whole deliverable.** Every essay run must also emit `youtube-description.txt` and `youtube-tags.txt` and deliver them alongside the MP4 — see `references/publishing-metadata.md`.

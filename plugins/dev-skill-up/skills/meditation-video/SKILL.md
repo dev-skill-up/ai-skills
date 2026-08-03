@@ -1,31 +1,32 @@
 ---
 name: meditation-video
-description: Produce calm spoken-word audio and video for relaxation and sleep — a warm narration over a single still image — entirely offline with open-source tools (Kokoro TTS + ffmpeg, no API key or GPU). Two content modes: guided meditations (mindfulness, breathing, body scan, relaxation, sleep meditation) and sleep essays (long-form narrated deep-dives on obscure topics, written to fall asleep to). Use whenever someone wants to create or narrate anything meant to calm, relax, soothe, or help someone fall asleep: a guided meditation, relaxation or breathing audio, a calming/relaxing audio or video, a sleep/mindfulness track, a bedtime or sleep audio essay, ambient "talk over a calm picture" content, or turning a meditation script or written essay into narrated audio or an MP4. Handles the whole pipeline: writing or refining the words with the right pacing, generating natural narration with Kokoro text-to-speech, stitching in pauses, choosing a backdrop image, and rendering a shareable MP4 with ffmpeg. Trigger on "guided meditation," "meditation video," "relaxation/calming/relaxing/soothing audio or video," "breathing exercise audio," "sleep meditation," "sleep essay," "audio essay to fall asleep to," "bedtime narration," or "narrate this script/essay."
+description: 'Produce narrated spoken-word audio and video — a warm voice over one or many still images — entirely offline with open-source tools (Kokoro TTS + ffmpeg, no API key or GPU). Three content modes: guided meditations (mindfulness, breathing, body scan, relaxation, sleep meditation), sleep essays (long-form narrated deep-dives on obscure topics, written to fall asleep to), and casual essays (awake documentaries — a ~20-minute narrated video essay over researched images and original diagrams, something to watch over dinner or the dishes). Use whenever someone wants to create or narrate a guided meditation, relaxation or breathing audio, any calming or soothing audio or video, a sleep or mindfulness track, a bedtime or sleep audio essay — or a documentary, video essay, narrated video essay, explainer video, or narrated slideshow on a researched topic. Handles the whole pipeline: research and writing with the right pacing, AI-tell removal, natural Kokoro narration, image sourcing with licence verification, original SVG diagrams, slideshow rendering with pans and dissolves, YouTube description/chapters/tags, and a shareable MP4. Trigger on "guided meditation," "meditation video," "relaxation/calming/relaxing/soothing audio or video," "breathing exercise audio," "sleep meditation," "sleep essay," "audio essay to fall asleep to," "bedtime narration," "narrate this script/essay," "documentary," "video essay," "narrated video essay," or "explainer video."'
 ---
 
 # Meditation Video
 
-Make calm, narrated spoken-word videos: a warm voice over a single still image, rendered as a portable MP4. Everything runs locally with open-source tools — Kokoro for the voice, ffmpeg for the video. No API keys, no GPU, no per-minute cost.
+Make narrated spoken-word videos: a warm voice over still imagery, rendered as a portable MP4. Everything runs locally with open-source tools — Kokoro for the voice, ffmpeg for the video. No API keys, no GPU, no per-minute cost.
 
-## Two content modes
+## Three content modes
 
-The audio→video machinery (generate narration → stitch in pauses → render over an image) is shared. What differs is the words and the pacing. Pick the mode from what the person wants, and read the matching craft reference before writing:
+The audio→video machinery (generate narration → stitch in pauses → render over imagery) is shared. What differs is the words, the pacing, and the pictures. Pick the mode from what the person wants, and read the matching craft reference before writing:
 
 - **Guided meditation** — mindfulness, breathing, body scan, relaxation, sleep meditation. Short cues separated by long, deliberate silence. The defining belief: **the silence is the content** — the words are scaffolding around the spaces where the listener actually meditates, so a good one is mostly quiet (speech fills only ~a third of the runtime). Craft guide: `references/meditation-script-craft.md`.
-- **Sleep essay** — a long-form (15+ minute) narrated deep-dive on an obscure, "lore"-rich topic, written as flowing prose to fall asleep to. The opposite pacing: **continuous narration** with only small natural pauses. Requires researching the topic first and delivering the essay as a Markdown artifact. Craft guide: `references/sleep-essay-craft.md`.
+- **Sleep essay** — a long-form (15+ minute) narrated deep-dive on an obscure, "lore"-rich topic, written as flowing prose to fall asleep to. The opposite pacing: **continuous narration** with only small natural pauses, over a single dark backdrop. Requires researching the topic first and delivering the essay as a Markdown artifact. Craft guide: `references/sleep-essay-craft.md`.
+- **Casual essay** — a narrated documentary for someone who is **awake**: "something to put on while eating or doing the dishes." Same continuous narration, but at normal speaking speed, over **many images and original diagrams** — a new picture every 30–60 seconds, cut on sentence boundaries. Wry, argumentative, allowed real tension. Craft guide: `references/casual-essay.md`.
 
-The pipeline steps below are written for a meditation; the **"Sleep essays"** section near the end covers the one place the flow differs (how the essay becomes a segments file). Everything else — setup, generation, image, render, delivery — is identical.
+The pipeline steps below are written for a meditation; the **"Sleep essays"** and **"Casual essays"** sections near the end cover where each flow differs. Setup, generation, and audio assembly are identical everywhere.
 
 ## When to run this vs. just talking
 
-If the person only wants *the script* (the words), you can write that directly — see `references/meditation-script-craft.md` for how — and skip the audio/video machinery. Run the full pipeline when they want a produced artifact: narrated audio or a video.
+If the person only wants *the script* (the words), you can write that directly — see the matching craft reference — and skip the audio/video machinery. Run the full pipeline when they want a produced artifact: narrated audio or a video.
 
 Gather a few specifics first (don't over-ask — most have a quick answer):
 
-- **Length** — 5 minutes is the common default. Drives how much silence to budget.
-- **Theme/style** — mindfulness/breath, body scan, sleep, loving-kindness, anxiety relief. Sets the script.
+- **Length** — 5 minutes is the meditation default; essays run 15–25+.
+- **Theme/style** — mindfulness/breath, body scan, sleep, loving-kindness, anxiety relief — or, for essays, the topic and the register.
 - **Voice** — female or male, and any accent. Default `af_heart` (American female) is the warmest. Full roster in `references/kokoro-and-ffmpeg.md`.
-- **Backdrop** — a vibe for the still image (misty lake, night sky, candle). You can pick a sensible one if they don't care.
+- **Backdrop** — a vibe for the still image (misty lake, night sky, candle). For a casual essay, ask about the **image licence tier instead** — see `references/image-sourcing.md`; getting this wrong means re-sourcing everything.
 - **Audio-only or video** — some people just want the MP3/WAV.
 
 ## The pipeline
@@ -76,7 +77,7 @@ Concatenates the segments with exact digital silence from each `pause` value, pl
 bash assets/fetch_image.sh image.jpg "https://images.unsplash.com/photo-<id>?w=1920&h=1080&fit=crop&q=80"
 ```
 
-Pick a deliberately calm, low-contrast, slow scene — the image sets the mood before a word is spoken. Free sources that need no key: Unsplash CDN direct URLs and `https://picsum.photos/1920/1080`. Aim for 1920×1080.
+Pick a deliberately calm, low-contrast, slow scene — the image sets the mood before a word is spoken. For this single-backdrop case, Unsplash CDN direct URLs and `https://picsum.photos/1920/1080` are fine. Aim for 1920×1080. (A casual essay sources ~30 topical images instead — that whole discipline, licence tiers included, lives in `references/image-sourcing.md`.)
 
 ### 5. Render the video
 
@@ -84,18 +85,23 @@ Pick a deliberately calm, low-contrast, slow scene — the image sets the mood b
 python3 assets/render_video.py image.jpg meditation.wav --out meditation.mp4
 ```
 
-Produces an H.264/AAC MP4 with gentle fade-in/out and an audio fade that lands in the trailing silence (never over a word). It deliberately renders at a low frame rate because the image is static — that keeps a 5-minute encode down to a few seconds. See `references/kokoro-and-ffmpeg.md` for every flag and why it's there.
+Produces an H.264/AAC MP4 with gentle fade-in/out and an audio fade that lands in the trailing silence (never over a word). It deliberately renders at a low frame rate because the image is static — that keeps a 5-minute encode down to a few seconds. See `references/kokoro-and-ffmpeg.md` for every flag and why it's there. (Casual essays use `assets/render_slideshow.py` instead — a multi-image dissolve chain with slow pans.)
 
 ### 6. Verify and deliver
 
-Confirm the output before handing it over: check the duration matches expectations and that it actually plays.
+Confirm the output before handing it over: check the duration matches expectations and that it actually plays. `ffprobe` catches the basics; a **full decode** is the only thing that catches real corruption:
 
 ```bash
 ffprobe -v error -show_entries format=duration:stream=codec_name,width,height \
   -of default=noprint_wrappers=1 meditation.mp4
+ffmpeg -v error -i meditation.mp4 -f null -   # silence means clean
 ```
 
-Then present the file to the person. Offer the obvious next tweaks — different voice, more or less silence, a different backdrop — since each is a one-line change and re-render.
+Then present the file to the person. **For either essay mode, the video alone is not the deliverable**: also emit `youtube-description.txt` and `youtube-tags.txt` (see step 7) and send them in the same delivery (the same `SendUserFile` call) as the MP4. Offer the obvious next tweaks — different voice, more or less silence, a different backdrop — since each is a one-line change and re-render.
+
+### 7. Publishing metadata (required for essays)
+
+Any sleep-essay or casual-essay run must produce **`youtube-description.txt`** (hook, chapters generated from real narration timings, sources, image credits, production note — under 5,000 characters) and **`youtube-tags.txt`** (under 500 characters, most specific first). Generate them with `assets/make_metadata.py` from the shot list and credits manifest — never by hand, or they drift from the video on the next re-render. The full spec is `references/publishing-metadata.md`. This step was forgotten once and had to be asked for; treat it as part of rendering, not an extra.
 
 ## Iterating
 
@@ -113,7 +119,8 @@ A sleep essay rides the same machinery but differs in mode: continuous narration
 The flow:
 
 1. **Research, then write** the essay (15+ minutes read aloud, ~4,000–6,000+ words of flowing prose) and save it as a Markdown file. **Present this Markdown as an artifact** — it's a primary deliverable the person also reads on screen, not just the video's soundtrack.
-2. **Convert the essay to a segments file** — this is the one extra step versus a meditation. Instead of hand-authoring the JSON, run:
+2. **De-AI the prose and fact-check it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside. Run the multi-pass procedure in `references/ai-tells.md` — with its metrics script — plus the independent fact-check it describes, before generating any audio.
+3. **Convert the essay to a segments file** — this is the one extra step versus a meditation. Instead of hand-authoring the JSON, run:
 
    ```bash
    python3 assets/essay_to_segments.py essay.md --out essay.json \
@@ -121,14 +128,30 @@ The flow:
    ```
 
    It strips Markdown, splits the prose into one segment per sentence (keeping generation chunked and resumable), inserts small pauses, and prints the word count and estimated read time so you can confirm the 15-minute floor.
-3. **Run the shared pipeline** on `essay.json`: `generate_segments.py` → `build_audio.py` → fetch image → `render_video.py`. Two deliberate differences at render time:
+4. **Run the shared pipeline** on `essay.json`: `generate_segments.py` → `build_audio.py` → fetch image → `render_video.py`. Two deliberate differences at render time:
    - **No wake-up ending and a longer dissolve** — a sleep essay must not tell the listener to return to their day; let it trail off. Pass `--audio-fade-out 4` (or more) to `render_video.py`.
    - **A dark, dim backdrop** (night sky, dark water) so a phone left playing doesn't light the room.
 
    Note that generation is the long pole here — tens of minutes of audio is minutes of CPU compute — but the generator is resumable, so just re-run it until all segments exist.
+5. **Emit the publishing metadata** (step 7 above) and deliver it with the MP4.
+
+## Casual essays
+
+A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, three differences — normal speaking speed, many images instead of one, and original diagrams. **Read `references/casual-essay.md` first**; it carries the measured numbers (length calibration, shot cadence, render cost) and the gotchas that silently produce wrong-looking-right results. The flow, briefly:
+
+1. **Ask the licence tier**, then research and write **2,900–3,600 words** for a 20–25 minute video (`references/image-sourcing.md`, `references/casual-essay.md`).
+2. **De-AI and fact-check** the script (`references/ai-tells.md`) before generating audio.
+3. **Segments at speed 1.0**: `essay_to_segments.py --speed 1.0 --sentence-pause 0.6 --paragraph-pause 2.2 --lead-in 0.5 --tail 4`, then bump the title segment's pause to ~2.8. Generate and build audio as usual.
+4. **Source ~30 images and build ~7 diagrams**, verify every licence (`references/image-sourcing.md`), make plates with `assets/make_plates.py`.
+5. **Plan shots and render** with `assets/render_slideshow.py` — anchors + greedy fill, cues timed off the real WAVs, one ffmpeg pass at ~1.15× realtime, so **start the render before you write the credits**. Eyeball the used-vs-unused plate diff before rendering.
+6. **Generate metadata** with `assets/make_metadata.py`, verify with a full decode, compress under the 30 MB delivery cap, and deliver MP4 + description + tags together.
 
 ## References
 
 - `references/meditation-script-craft.md` — guided-meditation words and silence: structure, pacing, audience, sources.
 - `references/sleep-essay-craft.md` — sleep-essay craft: the "lore" criterion, topic domains and examples, the pitch/research workflow, topics already covered, and writing prose for the ear.
-- `references/kokoro-and-ffmpeg.md` — the technical layer: Kokoro ONNX setup, the full voice roster, gotchas (including the `segments.py` name clash), and every ffmpeg flag explained.
+- `references/casual-essay.md` — the awake documentary: register, measured length calibration, shot cadence and selection, plate styles, diagram craft, render settings and costs, delivery under the size cap.
+- `references/image-sourcing.md` — sourcing 30 topical images honestly: the four licence tiers (ask first!), tier-A techniques, verified sources, Commons API resolution, SHA-1 provenance checks, and what to do when no honest image exists.
+- `references/ai-tells.md` — removing machine-written tells from essay prose: the four-pass procedure, `assets/tell_metrics.py` with measured targets, the structural tells, over-correction, narration-specific rules, and the fact-check pass.
+- `references/publishing-metadata.md` — the required description/chapters/tags deliverables: structure, hard limits, credit rules, and generating it all from the shot list so it never drifts.
+- `references/kokoro-and-ffmpeg.md` — the technical layer: Kokoro ONNX setup, the full voice roster, the still render and the slideshow render (crop-vs-zoompan, xfade math, render costs), process-kill and verification gotchas, cairosvg gotchas.
