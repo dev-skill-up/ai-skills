@@ -30,6 +30,8 @@ AI_VOCAB = [
     r"\brumou?r has it\b",
     # Narrating what the essay is not — excise, don't reword.
     r"\bevery(?:body|one) knows\b", r"\bthis is not that\b",
+    # Narrator guesses — keep the fact, drop the speculation.
+    r"\bmy guess\b", r"\bone suspects\b", r"\bnobody (?:writes down|knows) why\b",
 ]
 
 

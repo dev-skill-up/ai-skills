@@ -30,10 +30,11 @@ At `speed 1.0` with those pauses: **2,999 words → 20:25** (1,025 s speech + 20
 
 Awake listener. Wry, argumentative, willing to leave disputes unresolved. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud.
 
-Two hard rules, enforced in the ai-tells passes (`references/ai-tells.md`):
+Three hard rules, enforced in the ai-tells passes (`references/ai-tells.md`):
 
 - **No first person, at all.** The `tell_metrics.py` first-person count must read 0. This also kills the hedge register that rides on it — "I have heard", "I don't understand", "I always assumed". Say what is established, flatly. If a persistent rumor genuinely matters, attribute it to where it lives ("the New York Times described it as X") and then correct it — and do even that only when the correction is load-bearing. Most false claims deserve no airtime at all: leaving them out is the improvement.
 - **Never narrate what the essay is not.** No "everybody knows the famous version…", no "this is not that story", no naming an adjacent topic just to wave it away. Excise these framings; do not reword them. What remains should be what is actually in the essay.
+- **No guesses.** "Nobody writes down why two and not three; my guess is cost" — remove. State the fact ("it's two"); if research turned up an interesting reason why, add the reason; if not, move on. Speculation is not depth.
 
 ### Before any audio
 
