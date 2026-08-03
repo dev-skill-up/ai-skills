@@ -51,6 +51,7 @@ AI_VOCAB = [
     r"\b(?:stupidly|absurdly|laughably|comically) (?:mundane|simple|banal|small|ordinary|boring)\b",
     # The essay talking about itself — it is about its subject, never itself.
     r"\bthis (?:episode|essay|video)\b", r"\bonly sentence\b",
+    r"\bthis is the part (?:of|where)\b", r"\bwill be (?:quick|brief) about\b",
 ]
 
 
