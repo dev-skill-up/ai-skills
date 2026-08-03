@@ -46,6 +46,9 @@ AI_VOCAB = [
     # Manufactured doubt — report the documented conclusion instead.
     r"\bnever gets? resolved\b", r"\bnothing in the record\b",
     r"\buncomfortable (?:coincidence|truth|question)\b",
+    # Metanarration — answer the question, don't announce and pre-grade it.
+    r"(?m)(?:^|[.!?]\s+)As (?:to|for) why\b",
+    r"\b(?:stupidly|absurdly|laughably|comically) (?:mundane|simple|banal|small|ordinary|boring)\b",
 ]
 
 
