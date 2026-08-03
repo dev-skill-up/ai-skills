@@ -36,7 +36,7 @@ Run the AI-tell removal procedure (`references/ai-tells.md`) and the independent
 
 ## Visuals
 
-**Target: a new picture every 30–60 s, cued to a sentence boundary.** For 20 minutes that is ~30 shots. Mix photographs with original diagrams; 7 diagrams in 30 shots felt right. Sourcing and licensing for the photographs is its own discipline — read `references/image-sourcing.md` and **ask about the licence tier before sourcing anything**.
+**Target: a new picture every 30–60 s, cued to a sentence boundary.** For 20 minutes that is ~30 shots. Mix photographs with original diagrams; 7 diagrams in 30 shots felt right. Sourcing and licensing for the photographs is its own discipline — read `references/image-sourcing.md` before sourcing anything: **tier A (no obligation) is the only allowable tier, and there is nothing to ask the user**.
 
 ### Time every cue off the real audio, never off a clock
 
