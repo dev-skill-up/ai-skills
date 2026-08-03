@@ -10,7 +10,7 @@ Deliverables for a run: the essay Markdown (as an artifact), the MP4, and the pu
 
 ### No story, no essay
 
-Decide after research, before writing a word: if the central question closes with "the records were never released" — no mechanism, no reversal, nothing resolved and no open question with real stakes — there is no story. Discard the topic and pick another. The pipeline makes sunk-cost pushes expensive (~23 min of render, image sourcing, diagram passes), and no amount of production rescues a topic whose payoff is a shrug.
+Decide after research, before writing a word: if the central question closes with "the records were never released" — no mechanism, no reversal, nothing resolved and no open question with real stakes — there is no story. Discard the topic. The pipeline makes sunk-cost pushes expensive (~23 min of render, image sourcing, diagram passes), and no amount of production rescues a topic whose payoff is a shrug. Replacing a discarded topic is not a free pick: generate 50 fresh candidates and choose from them, exactly like the original selection (the pitch workflow in `references/sleep-essay-craft.md`).
 
 ### Settings that actually worked
 

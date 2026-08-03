@@ -42,11 +42,13 @@ These convey the scholarly angle and a recent development in 2–3 sentences, in
 
 ## The workflow
 
-1. **Pitch a batch.** When asked for ideas, produce a numbered list of **20–30** pitches, each a 2–3 sentence hook in the register above. Pitches can be speculative — verification happens later — but each must promise lore, not just oddity. Spread them across the domains.
+1. **Pitch a batch.** When asked for ideas, produce a numbered list of **50** pitches, each a 2–3 sentence hook in the register above. Pitches can be speculative — verification happens later — but each must promise lore, not just oddity. Spread them across the domains.
 2. **Selection.** The person picks one (or asks for another batch).
 3. **Research the chosen topic** before writing (see below).
 4. **Write the full essay** as a Markdown artifact.
 5. **Render to video** via the pipeline (see "Feeding the pipeline").
+
+**If a topic is discarded** (research collapsed the story, or it fails for any other reason), do not quietly substitute a favorite: go back to step 1 — generate 50 fresh candidates and choose from them, exactly as at the start.
 
 ### Don't repeat covered topics
 
@@ -64,7 +66,7 @@ Search **before** writing, both for inspiration and to verify specifics. The pat
 - **Combine scholar names + technical terms + discovery years.** This is the most reliable way to surface actual academic sources rather than popularizations. E.g. a site name plus an excavator's surname plus "2019"; a method's technical name plus the mathematician who reconstructed it.
 - **Go general → specific progressively.** Start wide to find the names and terms, then re-search with those to reach the primary scholarship.
 - Verify the load-bearing claims — the surprising reversal, the specific date, the mechanism — at this stage. The pitch could be a speculative hook; the essay should not be.
-- If verification collapses the story — the payoff turns out to be "nobody knows, and the records are closed" — discard the topic and pick another before writing. Generation and render time are too expensive to spend on a topic with no story.
+- If verification collapses the story — the payoff turns out to be "nobody knows, and the records are closed" — discard the topic before writing. Generation and render time are too expensive to spend on a topic with no story. Replacing it means a fresh batch of 50 candidates and a proper selection (see "The workflow"), not reaching for a pet topic.
 
 ## Essay craft
 
