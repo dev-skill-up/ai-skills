@@ -8,6 +8,8 @@ Deliverables for a run: the essay Markdown (as an artifact), the MP4, and the pu
 
 ## The words
 
+Topic selection, research strategy, the kill criterion ("no story, no essay"), and the six hard house rules are shared with the sleep essay — **read `references/essay.md` first**. This section covers only what is casual-specific.
+
 ### Settings that actually worked
 
 ```bash
@@ -28,11 +30,11 @@ At `speed 1.0` with those pauses: **2,999 words → 20:25** (1,025 s speech + 20
 
 ### Register
 
-Awake listener. Wry, argumentative, willing to leave disputes unresolved. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud.
+Awake listener. Wry, argumentative, willing to leave disputes unresolved. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud. The six hard house rules in `references/essay.md` apply in full.
 
 ### Before any audio
 
-Run the AI-tell removal procedure (`references/ai-tells.md`) and the independent fact-check pass it describes. Multi-pass, with the metrics script, on the finished draft — not a single "polish" prompt. Both matter more at documentary register than at sleep register, because the listener is awake and paying attention.
+Run the AI-tell removal procedure and fact-check per `references/essay.md` — multi-pass with the metrics script, not a single "polish" prompt. Both matter more at documentary register than at sleep register, because the listener is awake and paying attention.
 
 ## Visuals
 

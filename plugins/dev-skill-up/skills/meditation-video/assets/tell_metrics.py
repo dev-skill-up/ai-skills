@@ -25,6 +25,33 @@ AI_VOCAB = [
     r"\bmyriad\b", r"\bplethora\b", r"\bmultifaceted\b", r"\bintricate\b",
     r"\bit is worth noting\b", r"\bin conclusion\b", r"\bstark reminder\b",
     r"\brich history\b", r"\bnot just\b[^.!?]*\bbut\b",
+    # Unattributed rumor hedges — attribute to a real source or omit.
+    r"\bit is said\b", r"\bsome say\b", r"\blegend has it\b",
+    r"\brumou?r has it\b",
+    # Narrating what the essay is not — excise, don't reword.
+    r"\bevery(?:body|one) knows\b", r"\bthis is not that\b",
+    # Narrator guesses — keep the fact, drop the speculation.
+    r"\bmy guess\b", r"\bone suspects\b", r"\bnobody (?:writes down|knows) why\b",
+    # Negation transitions ("Not to the crash. To a foundry…") — the
+    # sentence-initial anchor keeps ordinary mid-sentence "not to" out.
+    r"(?m)(?:^|[.!?]\s+)Not (?:to|the|that)\b",
+    # Performed failure — fix the draft, don't narrate the fixing.
+    r"\bshould have (?:been )?(?:said|mentioned|flagged|introduced|explained)\b",
+    r"(?m)(?:^|[.!?]\s+)Sorry\b",
+    # Self-commenting flourish ("Three superlatives, none of them good").
+    r"\b(?:Two|Three|Four|Five) \w+s?, (?:none|all|each|neither) of (?:them|which)\b",
+    # Narrated transitions — make the move, don't announce it.
+    r"\b(?:jump|skip|flash|fast-forward) (?:forward|back|ahead)\b",
+    r"\bbelongs here\b",
+    # Manufactured doubt — report the documented conclusion instead.
+    r"\bnever gets? resolved\b", r"\bnothing in the record\b",
+    r"\buncomfortable (?:coincidence|truth|question)\b",
+    # Metanarration — answer the question, don't announce and pre-grade it.
+    r"(?m)(?:^|[.!?]\s+)As (?:to|for) why\b",
+    r"\b(?:stupidly|absurdly|laughably|comically) (?:mundane|simple|banal|small|ordinary|boring)\b",
+    # The essay talking about itself — it is about its subject, never itself.
+    r"\bthis (?:episode|essay|video)\b", r"\bonly sentence\b",
+    r"\bthis is the part (?:of|where)\b", r"\bwill be (?:quick|brief) about\b",
 ]
 
 
