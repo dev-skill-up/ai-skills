@@ -30,11 +30,20 @@ At `speed 1.0` with those pauses: **2,999 words → 20:25** (1,025 s speech + 20
 
 ### Register
 
-Awake listener. Wry, argumentative, willing to leave disputes unresolved. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud. The six hard house rules in `references/essay.md` apply in full.
+Awake listener. Real narrative tension is fine — this is not a lullaby. Still flowing prose: no headers, no bullets, no lists read aloud. The six hard house rules in `references/essay.md` apply in full.
+
+The voice itself is **per-project: read it out of the user's brief**, and where the brief and anything in this file conflict, the brief wins. The source run's brief was a channel premised on deference to the investigation's report; the register hardcoded here fought it for the whole script and nothing reconciled them. Absent any signal in the brief, the default is wry, grounded in facts, and willing to leave a genuinely open dispute unresolved — one essay has no room for staged back-and-forth, and accuracy beats attitude wherever the two compete.
 
 ### Before any audio
 
-Run the AI-tell removal procedure and fact-check per `references/essay.md` — multi-pass with the metrics script, not a single "polish" prompt. Both matter more at documentary register than at sleep register, because the listener is awake and paying attention.
+Run the AI-tell **convergence loop** in `references/ai-tells.md`. Do not compress it into "run the passes and the script" — that compression is what once produced two subagent calls total, with structure folded into an open question at the end of the rhythm brief, and a dozen shipped defects. Concretely:
+
+- **It is a loop, not a pipeline.** Any finding from any pass → fix it → run every pass again from the top. The procedure is complete only when one full cycle returns zero findings from every pass.
+- **The gate is hard.** Audio generation (`essay_to_segments.py` onward) is blocked until a cycle comes back clean. A pass that has not run in that final clean cycle has not run.
+- **These reviews are separate subagents, each cycle they run:** rhythm (2), structure (3a), register (3b), comprehension (4), the cold read (5), and the fact-check (6). None may be folded into another's brief.
+- **Bulk edits — first-person excision, the cut pass, hitting the word count — happen before the reviews within a cycle, never after.** Late compression to reach a length target is how the worst line in the source run shipped unreviewed.
+
+The loop and the fact-check both matter more at documentary register than at sleep register, because the listener is awake and paying attention.
 
 ## Visuals
 
@@ -123,7 +132,7 @@ Send the compressed file, mention the master exists, offer to split it or write 
 ## Data flow
 
 ```
-essay.md ─(ai-tells passes + fact-check)─> essay.md (final)
+essay.md ─(ai-tells convergence loop; audio gated on a clean cycle)─> essay.md (final)
 essay.md ──> essay_to_segments.py --speed 1.0 ──> essay.json (title pause → 2.8)
 essay.json ──> generate_segments.py ──> work/seg_*.wav ──> build_audio.py ──> essay.wav
 images_raw/ ──> make_plates.py ──> plates/ + plates manifest

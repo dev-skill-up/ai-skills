@@ -27,7 +27,7 @@ Decide after research, before writing a word: if the central question closes wit
 
 ## The house rules
 
-Six hard rules, enforced in the ai-tells passes (`references/ai-tells.md`):
+Six hard rules, enforced in the ai-tells convergence loop (`references/ai-tells.md`). The default fix for any violation is deletion — excise, do not reword:
 
 - **No first person, at all.** The `tell_metrics.py` first-person count must read 0. This also kills the hedge register that rides on it — "I have heard", "I don't understand", "I always assumed". Say what is established, flatly. If a persistent rumor genuinely matters, attribute it to where it lives ("the New York Times described it as X") and then correct it — and do even that only when the correction is load-bearing. Most false claims deserve no airtime at all: leaving them out is the improvement.
 - **Never narrate what the essay is not.** No "everybody knows the famous version…", no "this is not that story", no naming an adjacent topic just to wave it away — and no negation transitions either ("Not to the crash. To a foundry in Ohio." — go straight to the foundry). Excise these framings; do not reword them. What remains should be what is actually in the essay.
@@ -38,4 +38,4 @@ Six hard rules, enforced in the ai-tells passes (`references/ai-tells.md`):
 
 ## Before any audio
 
-Run the AI-tell removal procedure (`references/ai-tells.md`) on the finished Markdown draft — multi-pass, with the metrics script, plus the independent fact-check pass it describes. Do it before `essay_to_segments.py`: fixing prose after generation wastes all the TTS compute.
+Run the AI-tell convergence loop (`references/ai-tells.md`) on the finished Markdown draft: every pass — the destructive excision and cut passes, the metrics script, the adversarial and cold reviews, and the independent fact-check — re-run from the top after any fix, until one complete cycle returns zero findings from every pass. That clean cycle is a hard gate: audio generation is blocked until it exists, and a pass that has not run in it has not run. Do it before `essay_to_segments.py`: fixing prose after generation wastes all the TTS compute.

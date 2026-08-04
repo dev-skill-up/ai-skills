@@ -119,7 +119,7 @@ A sleep essay rides the same machinery but differs in mode: continuous narration
 The flow:
 
 1. **Research, then write** the essay (15+ minutes read aloud, ~4,000–6,000+ words of flowing prose) and save it as a Markdown file. **Present this Markdown as an artifact** — it's a primary deliverable the person also reads on screen, not just the video's soundtrack.
-2. **De-AI the prose and fact-check it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside. Run the multi-pass procedure in `references/ai-tells.md` — with its metrics script — plus the independent fact-check it describes, before generating any audio.
+2. **De-AI the prose and fact-check it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside. Run the convergence loop in `references/ai-tells.md` — every pass re-run from the top after any fix, with its metrics script and the independent fact-check it describes, until one full cycle returns zero findings. Audio generation is gated on that clean cycle.
 3. **Convert the essay to a segments file** — this is the one extra step versus a meditation. Instead of hand-authoring the JSON, run:
 
    ```bash
@@ -153,6 +153,6 @@ A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, thre
 - `references/sleep-essay-craft.md` — sleep-essay craft: the "lore" criterion, topic domains and examples, topics already covered, and writing prose for the ear.
 - `references/casual-essay.md` — the awake documentary: register, measured length calibration, shot cadence and selection, plate styles, diagram craft, render settings and costs, delivery under the size cap.
 - `references/image-sourcing.md` — sourcing 30 topical images honestly: tier A (no obligation) as the only allowable tier — never ask — plus tier-A techniques, verified sources, Commons API resolution, SHA-1 provenance checks, and what to do when no honest image exists.
-- `references/ai-tells.md` — removing machine-written tells from essay prose: the five-pass procedure (including the cold-listener comprehension pass), `assets/tell_metrics.py` with measured targets, the structural tells, over-correction, narration-specific rules, and the fact-check pass.
+- `references/ai-tells.md` — removing machine-written tells from essay prose: the convergence loop and its hard audio gate, the destructive excision and cut passes, the adversarial/cold review passes, `assets/tell_metrics.py` with measured targets, the structural tells, over-correction, narration-specific rules, and the fact-check pass.
 - `references/publishing-metadata.md` — the required description/chapters/tags deliverables: structure, hard limits, credit rules, and generating it all from the shot list so it never drifts.
 - `references/kokoro-and-ffmpeg.md` — the technical layer: Kokoro ONNX setup, the full voice roster, the still render and the slideshow render (crop-vs-zoompan, xfade math, render costs), process-kill and verification gotchas, cairosvg gotchas.
