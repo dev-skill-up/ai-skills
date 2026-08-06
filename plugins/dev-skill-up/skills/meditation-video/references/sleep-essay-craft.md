@@ -79,7 +79,7 @@ A sleep essay is **continuous narration** — the opposite of a meditation's sil
 
    It strips Markdown, splits the prose into one segment per sentence (so generation stays chunked and resumable), and inserts a short beat after each sentence and a slightly longer one between paragraphs. It prints the word count and an estimated read time so you can check the 15-minute floor.
 
-3. Run the normal pipeline on `essay.json`: `generate_segments.py` → `build_audio.py` → choose image → `render_video.py`.
+3. Run the normal pipeline on `essay.json`: `generate_segments.py essay.json --passes passes.json` → `build_audio.py` → choose image → `render_video.py`. The `--passes` report is the final clean ai-tells cycle (`references/ai-tells.md`); the generator refuses to run without it, by design — never edit it to skip the check.
 
 Differences from a meditation render, worth setting deliberately:
 

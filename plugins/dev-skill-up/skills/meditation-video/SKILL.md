@@ -63,6 +63,8 @@ python3 assets/generate_segments.py meditation.json --workdir work
 
 One WAV per line, into `work/`. It's resumable — already-rendered lines are skipped — so if it's interrupted, just run it again. Generation is CPU-only at several times real-time.
 
+For essay-derived scripts this command also enforces the de-AI gate: it demands `--passes passes.json`, the verdicts of the final clean ai-tells cycle, and refuses to generate otherwise (see the essay sections below). **Never edit the script to loosen that check** — if it blocks, the loop isn't done.
+
 ### 3. Stitch in the silence
 
 ```bash
@@ -119,7 +121,7 @@ A sleep essay rides the same machinery but differs in mode: continuous narration
 The flow:
 
 1. **Research, then write** the essay (15+ minutes read aloud, ~4,000–6,000+ words of flowing prose) and save it as a Markdown file. **Present this Markdown as an artifact** — it's a primary deliverable the person also reads on screen, not just the video's soundtrack.
-2. **De-AI the prose and fact-check it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside. Run the convergence loop in `references/ai-tells.md` — every pass re-run from the top after any fix, with its metrics script and the independent fact-check it describes, until one full cycle returns zero findings. Audio generation is gated on that clean cycle.
+2. **De-AI the prose and fact-check it.** A researched essay written in one pass reads machine-written in ways you cannot see from inside. Run the convergence loop in `references/ai-tells.md` — every pass re-run from the top after any fix, with its metrics script and the independent fact-check it describes, until one full cycle returns zero findings. When that clean cycle exists, write its structured verdicts to `passes.json` (format in `references/ai-tells.md`) — audio generation is mechanically gated on that file: `generate_segments.py` checks that all nine passes are present and clean, and refuses to run without it. **Do not edit the scripts to get around the gate, and do not write a verdict for a pass that didn't run** — a blocked gate means more cycles, nothing else.
 3. **Convert the essay to a segments file** — this is the one extra step versus a meditation. Instead of hand-authoring the JSON, run:
 
    ```bash
@@ -127,8 +129,8 @@ The flow:
        --voice af_heart --speed 0.9 --sentence-pause 0.5 --paragraph-pause 1.4 --tail 4
    ```
 
-   It strips Markdown, splits the prose into one segment per sentence (keeping generation chunked and resumable), inserts small pauses, and prints the word count and estimated read time so you can confirm the 15-minute floor.
-4. **Run the shared pipeline** on `essay.json`: `generate_segments.py` → `build_audio.py` → fetch image → `render_video.py`. Two deliberate differences at render time:
+   It strips Markdown, splits the prose into one segment per sentence (keeping generation chunked and resumable), inserts small pauses, and prints the word count and estimated read time so you can confirm the 15-minute floor. It also stamps the JSON `"passes_required": true` — the marker `generate_segments.py` uses to enforce the audio gate.
+4. **Run the shared pipeline** on `essay.json`: `generate_segments.py essay.json --passes passes.json` → `build_audio.py` → fetch image → `render_video.py`. Two deliberate differences at render time:
    - **No wake-up ending and a longer dissolve** — a sleep essay must not tell the listener to return to their day; let it trail off. Pass `--audio-fade-out 4` (or more) to `render_video.py`.
    - **A dark, dim backdrop** (night sky, dark water) so a phone left playing doesn't light the room.
 
@@ -140,8 +142,8 @@ The flow:
 A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, three differences — normal speaking speed, many images instead of one, and original diagrams. **Read `references/essay.md` first** (the shared topic workflow, research strategy, kill criterion, and house rules), then `references/casual-essay.md`; it carries the measured numbers (length calibration, shot cadence, render cost) and the gotchas that silently produce wrong-looking-right results. The flow, briefly:
 
 1. **Research and write 2,900–3,600 words** for a 20–25 minute video (`references/casual-essay.md`). Image licensing is fixed and never asked about: **tier A (no obligation) only** (`references/image-sourcing.md`).
-2. **De-AI and fact-check** the script (`references/ai-tells.md`) before generating audio.
-3. **Segments at speed 1.0**: `essay_to_segments.py --speed 1.0 --sentence-pause 0.6 --paragraph-pause 2.2 --lead-in 0.5 --tail 4`, then bump the title segment's pause to ~2.8. Generate and build audio as usual.
+2. **De-AI and fact-check** the script (`references/ai-tells.md`) before generating audio, and write the clean cycle's verdicts to `passes.json` — the gate `generate_segments.py` enforces.
+3. **Segments at speed 1.0**: `essay_to_segments.py --speed 1.0 --sentence-pause 0.6 --paragraph-pause 2.2 --lead-in 0.5 --tail 4`, then bump the title segment's pause to ~2.8. Generate with `generate_segments.py essay.json --passes passes.json` and build audio as usual.
 4. **Source ~30 images and build ~7 diagrams**, verify every licence (`references/image-sourcing.md`), make plates with `assets/make_plates.py`.
 5. **Plan shots and render** with `assets/render_slideshow.py` — anchors + greedy fill, cues timed off the real WAVs, one ffmpeg pass at ~1.15× realtime, so **start the render before you write the credits**. Eyeball the used-vs-unused plate diff before rendering.
 6. **Generate metadata** with `assets/make_metadata.py`, verify with a full decode, compress under the 30 MB delivery cap, and deliver MP4 + description + tags together.
@@ -153,6 +155,6 @@ A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, thre
 - `references/sleep-essay-craft.md` — sleep-essay craft: the "lore" criterion, topic domains and examples, topics already covered, and writing prose for the ear.
 - `references/casual-essay.md` — the awake documentary: register, measured length calibration, shot cadence and selection, plate styles, diagram craft, render settings and costs, delivery under the size cap.
 - `references/image-sourcing.md` — sourcing 30 topical images honestly: tier A (no obligation) as the only allowable tier — never ask — plus tier-A techniques, verified sources, Commons API resolution, SHA-1 provenance checks, and what to do when no honest image exists.
-- `references/ai-tells.md` — removing machine-written tells from essay prose: the convergence loop and its hard audio gate, the destructive excision and cut passes, the adversarial/cold review passes, `assets/tell_metrics.py` with measured targets, the structural tells, over-correction, narration-specific rules, and the fact-check pass.
+- `references/ai-tells.md` — removing machine-written tells from essay prose: the convergence loop and its hard audio gate (enforced by `generate_segments.py` via the `passes.json` report), the destructive excision and cut passes, the adversarial/cold review passes, `assets/tell_metrics.py` with measured targets, the structural tells, over-correction, narration-specific rules, and the fact-check pass.
 - `references/publishing-metadata.md` — the required description/chapters/tags deliverables: structure, hard limits, credit rules, and generating it all from the shot list so it never drifts.
 - `references/kokoro-and-ffmpeg.md` — the technical layer: Kokoro ONNX setup, the full voice roster, the still render and the slideshow render (crop-vs-zoompan, xfade math, render costs), process-kill and verification gotchas, cairosvg gotchas.
