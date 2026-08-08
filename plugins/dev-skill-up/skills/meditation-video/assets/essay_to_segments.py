@@ -14,7 +14,11 @@ Usage:
         [--sentence-pause 0.5] [--paragraph-pause 1.4] \
         [--lead-in 0.5] [--tail 4]
 
-The resulting JSON feeds generate_segments.py / build_audio.py unchanged.
+The resulting JSON feeds generate_segments.py / build_audio.py unchanged —
+except that it is stamped `"passes_required": true`, which makes
+generate_segments.py refuse to render audio without a --passes report showing
+one clean cycle of the ai-tells convergence loop. Do not remove the stamp and
+do not edit the scripts to get around it.
 """
 import argparse
 import json
@@ -121,6 +125,10 @@ def main() -> None:
         "lang": args.lang,
         "lead_in": args.lead_in,
         "tail": args.tail,
+        # Essays are gated on the ai-tells convergence loop: this stamp makes
+        # generate_segments.py demand --passes with a clean-cycle report.
+        # Never remove it, and never edit either script to skip the gate.
+        "passes_required": True,
         "segments": segments,
     }
     with open(args.out, "w") as fh:

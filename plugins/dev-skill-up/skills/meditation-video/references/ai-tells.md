@@ -16,7 +16,7 @@ Three different passes, three fixes, three new defects, zero re-checks. A pipeli
 
 Run every pass, in the cycle order below. **If any pass returns a finding, fix it — and then run every pass again from the top.** The procedure is complete only when one full cycle returns zero findings from every pass. A pass that has not been run in the final clean cycle has not been run.
 
-**This is a hard gate, not advice. Nothing proceeds to audio until one complete cycle is clean.**
+**This is a hard gate, not advice — and it is enforced in code, not on the honor system.** Nothing proceeds to audio until one complete cycle is clean: the final clean cycle's verdicts are written to `passes.json`, and `generate_segments.py` refuses to render any essay-derived script without that report (see "The passes report" below).
 
 ### Cycle order — destructive edits first, cheap checks next, expensive reviews last
 
@@ -33,6 +33,37 @@ A naive "repeat until zero" oscillates, burns unbounded subagent calls, or exits
 - **The touch counter — the termination rule.** Track how many cycles have modified each sentence. A sentence modified in three cycles gets **deleted**, not rewritten a fourth time. Deletion always terminates; rewriting does not. It is also the correct editorial answer: a sentence that three different passes keep objecting to is not a sentence with a wording problem.
 - **Deletion bias after cycle 2.** From cycle 3 on, prefer deletion to any other fix. Most tells below already prescribe cutting; once the draft is close, cutting is the default remedy.
 - **Escape hatch.** If the loop has not converged after ~5 cycles, stop patching. Non-convergence means the section is structurally wrong, not underpolished — rewrite it from the research. The alternative is an infinite loop that produces increasingly damaged prose.
+
+### The passes report — how the gate is enforced
+
+The gate exists because "run all the passes first" kept being skipped. So it is mechanical now: `essay_to_segments.py` stamps every essay-derived segments file `"passes_required": true`, and `generate_segments.py` will not generate a single sample of audio for such a file without `--passes passes.json` — a report it checks strictly.
+
+When (and only when) a full cycle returns zero findings from every pass, write that cycle's structured verdicts to `passes.json`:
+
+```json
+{
+  "cycle": 4,
+  "passes": [
+    {"pass": "first-person-excision", "findings": [], "count_by_category": {"first-person": 0}},
+    {"pass": "cut",            "findings": [], "count_by_category": {"no-new-information": 0}},
+    {"pass": "mechanical",     "findings": [], "count_by_category": {"ai-vocab": 0, "metanarration-floor": 0, "first-person": 0, "boundary-metrics": 0}},
+    {"pass": "rhythm",         "findings": [], "count_by_category": {"kicker": 0, "flat-coda": 0, "repeated-frame": 0}},
+    {"pass": "structure",      "findings": [], "count_by_category": {"repeating-unit": 0, "outline-order": 0, "name-density": 0, "false-transition": 0}},
+    {"pass": "register",       "findings": [], "count_by_category": {"metanarration": 0, "narrated-transition": 0, "flourish": 0, "unearned-judgment": 0, "performed-failure": 0, "essay-about-itself": 0, "composed-ending": 0}},
+    {"pass": "comprehension",  "findings": [], "count_by_category": {"unglossed-term": 0}},
+    {"pass": "cold-read",      "findings": [], "count_by_category": {"broken-referent": 0, "unwanted-statement": 0}},
+    {"pass": "fact-check",     "findings": [], "count_by_category": {"unsupported-claim": 0, "manufactured-doubt": 0}}
+  ]
+}
+```
+
+`generate_segments.py` checks that all nine passes are present, that every `findings` list is explicitly empty, that every `count_by_category` names the pass's categories with all zeros (an empty object is "looks good", which is not a verdict), and that everything carries one shared cycle number. The category names above are illustrative — each verdict reports whatever categories the pass actually owns — but the empty-findings and all-zeros requirements are exact.
+
+Three rules around the report are absolute:
+
+- **Never edit the scripts to get past the gate.** Not `generate_segments.py`, not the `passes_required` stamp in `essay_to_segments.py`'s output. The gate blocking is the gate working: the only way through is more cycles, until one is clean.
+- **Never fabricate a verdict.** Every entry is copied from a pass that actually ran, on the current text, in the final cycle. Writing a zero for a pass that did not run is the exact failure this gate exists to stop.
+- **Any edit after the report invalidates it.** Touch one sentence and the report describes text that no longer exists — delete `passes.json`, re-run the cycle from the top, and write a new report from the new clean cycle.
 
 ### Excise, don't reword — the general policy
 

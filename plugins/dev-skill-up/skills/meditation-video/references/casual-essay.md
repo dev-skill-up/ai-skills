@@ -39,7 +39,7 @@ The voice itself is **per-project: read it out of the user's brief**, and where 
 Run the AI-tell **convergence loop** in `references/ai-tells.md`. Do not compress it into "run the passes and the script" — that compression is what once produced two subagent calls total, with structure folded into an open question at the end of the rhythm brief, and a dozen shipped defects. Concretely:
 
 - **It is a loop, not a pipeline.** Any finding from any pass → fix it → run every pass again from the top. The procedure is complete only when one full cycle returns zero findings from every pass.
-- **The gate is hard.** Audio generation (`essay_to_segments.py` onward) is blocked until a cycle comes back clean. A pass that has not run in that final clean cycle has not run.
+- **The gate is hard — and mechanical.** Audio generation is blocked until a cycle comes back clean: write that cycle's verdicts to `passes.json`, because `generate_segments.py` demands it (`--passes`) for any essay-derived script and verifies all nine passes are present with zero findings. A pass that has not run in that final clean cycle has not run — and has no verdict to record. Never edit the scripts to get past the gate.
 - **These reviews are separate subagents, each cycle they run:** rhythm (2), structure (3a), register (3b), comprehension (4), the cold read (5), and the fact-check (6). None may be folded into another's brief.
 - **Bulk edits — first-person excision, the cut pass, hitting the word count — happen before the reviews within a cycle, never after.** Late compression to reach a length target is how the worst line in the source run shipped unreviewed.
 
@@ -132,9 +132,10 @@ Send the compressed file, mention the master exists, offer to split it or write 
 ## Data flow
 
 ```
-essay.md ─(ai-tells convergence loop; audio gated on a clean cycle)─> essay.md (final)
+essay.md ─(ai-tells convergence loop; clean cycle ──> passes.json)─> essay.md (final)
 essay.md ──> essay_to_segments.py --speed 1.0 ──> essay.json (title pause → 2.8)
-essay.json ──> generate_segments.py ──> work/seg_*.wav ──> build_audio.py ──> essay.wav
+essay.json + passes.json ──> generate_segments.py --passes passes.json
+        ──> work/seg_*.wav ──> build_audio.py ──> essay.wav
 images_raw/ ──> make_plates.py ──> plates/ + plates manifest
 essay.json + work/ + shots.json (anchors+candidates) ──> render_slideshow.py
         ──> shots.resolved.json + master.mp4 ──> compress ──> delivery.mp4
