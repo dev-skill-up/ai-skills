@@ -10,9 +10,12 @@ generation chunked and resumable.
 
 Usage:
     python3 essay_to_segments.py ESSAY.md --out essay.json \
-        [--voice af_heart] [--speed 0.9] [--lang en-us] \
+        [--voice af_heart] [--speed 0.7] [--lang en-us] \
         [--sentence-pause 0.5] [--paragraph-pause 1.4] \
         [--lead-in 0.5] [--tail 4]
+
+The default speed of 0.7 is the sleep-essay setting; a casual essay passes
+--speed 1.0 (and --wpm 147 for an accurate read-time estimate).
 
 The resulting JSON feeds generate_segments.py / build_audio.py unchanged —
 except that it is stamped `"passes_required": true`, which makes
@@ -91,15 +94,17 @@ def main() -> None:
     ap.add_argument("essay", help="essay Markdown or text file")
     ap.add_argument("--out", default="essay.json")
     ap.add_argument("--voice", default="af_heart")
-    ap.add_argument("--speed", type=float, default=0.9)
+    ap.add_argument("--speed", type=float, default=0.7,
+                    help="sleep-essay default; casual essays pass 1.0")
     ap.add_argument("--lang", default="en-us")
     ap.add_argument("--sentence-pause", type=float, default=0.5)
     ap.add_argument("--paragraph-pause", type=float, default=1.4)
     ap.add_argument("--lead-in", type=float, default=0.5)
     ap.add_argument("--tail", type=float, default=4.0,
                     help="trailing seconds; longer than a meditation so it dissolves")
-    ap.add_argument("--wpm", type=float, default=140.0,
-                    help="assumed narration rate for the read-time estimate")
+    ap.add_argument("--wpm", type=float, default=110.0,
+                    help="assumed narration rate for the read-time estimate; "
+                         "the default matches speed 0.7 — pass ~147 at speed 1.0")
     args = ap.parse_args()
 
     with open(args.essay) as fh:
