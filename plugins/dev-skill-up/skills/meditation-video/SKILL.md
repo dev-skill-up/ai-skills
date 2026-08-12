@@ -79,7 +79,7 @@ Concatenates the segments with exact digital silence from each `pause` value, pl
 bash assets/fetch_image.sh image.jpg "https://images.unsplash.com/photo-<id>?w=1920&h=1080&fit=crop&q=80"
 ```
 
-Pick a deliberately calm, low-contrast, slow scene — the image sets the mood before a word is spoken. For this single-backdrop case, Unsplash CDN direct URLs and `https://picsum.photos/1920/1080` are fine. Aim for 1920×1080. (A casual essay sources ~30 topical images instead — that whole discipline, licence tiers included, lives in `references/image-sourcing.md`.)
+Pick a deliberately calm, low-contrast, slow scene — the image sets the mood before a word is spoken. For this single-backdrop case, Unsplash CDN direct URLs and `https://picsum.photos/1920/1080` are fine. Aim for 1920×1080. **A meditation or sleep essay gets exactly one still photograph and nothing else** — diagrams, caption panels, plates, and multi-image slideshows are casual-essay machinery only, never built for the other two modes. (A casual essay sources ~30 topical images instead — that whole discipline, licence tiers included, lives in `references/image-sourcing.md`.)
 
 ### 5. Render the video
 
