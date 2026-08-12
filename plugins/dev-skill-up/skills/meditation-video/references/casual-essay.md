@@ -22,7 +22,7 @@ Then edit `essay.json` and bump the **title segment's pause to ~2.8** so the tit
 
 ### Length calibration — measured, use this instead of guessing
 
-At `speed 1.0` with those pauses: **2,999 words → 20:25** (1,025 s speech + 200 s silence). That is ~175 wpm of raw speech and ~147 wpm effective. The "140 wpm" figure elsewhere in this skill is for `speed 0.9` and will overshoot by ~20% here.
+At `speed 1.0` with those pauses: **2,999 words → 20:25** (1,025 s speech + 200 s silence). That is ~175 wpm of raw speech and ~147 wpm effective. The read-time estimate `essay_to_segments.py` prints assumes the sleep-essay pace (110 wpm at `speed 0.7`) unless you pass `--wpm 147`, so at speed 1.0 it overshoots badly — use this calibration instead.
 
 - For 20–25 minutes, write **2,900–3,600 words**.
 - **Prefer widening pauses over padding prose** when you land short. Going from 0.55/1.9 to 0.65/2.4 bought 60 s on a 3,150-word script.

@@ -4,13 +4,23 @@ Everything here applies to **both** essay types — the sleep essay (`references
 
 ## Topic workflow
 
-1. **Pitch a batch.** Produce a numbered list of **50** pitches, each a 2–3 sentence hook in the register the essay type calls for (for a sleep essay, the lore criterion in `sleep-essay-craft.md`). Pitches can be speculative — verification happens later.
-2. **Selection.** The person picks one (or asks for another batch).
-3. **Research** the chosen topic before writing (below).
-4. **Write the full essay** as a Markdown artifact.
-5. **Render** via the pipeline (see the type-specific file).
+If the person named a topic, use it. Otherwise the topic is chosen by a **randomized draw** — never by intuition. Left to pick, you will gravitate to the same comfortable favorites every run; the draw exists to break that, so follow it exactly:
 
-**If a topic is discarded** — research collapsed the story, or it fails for any other reason — do not quietly substitute a favorite: go back to step 1, generate 50 fresh candidates, and choose from them, exactly as at the start.
+1. **Seed the pool from outside your own recall.** Run several varied exploratory web searches for fresh material first — recent archaeology finds, decipherment news, history-of-science roundups, "X reinterpreted". Candidates should come from what the searches surface, not only from memory.
+2. **Pitch a batch.** Produce a numbered list of **50** pitches, each a 2–3 sentence hook in the register the essay type calls for (for a sleep essay, the lore criterion in `sleep-essay-craft.md`), spread across **all** the domains the type's craft file lists. Keep the order in which they were generated — do not curate, reorder, or reshuffle. Pitches can be speculative — verification happens later.
+3. **Draw at random from the bottom half.** The front of the list is where habits accumulate, so discard positions 1–25 and draw an index from the rest:
+
+   ```bash
+   shuf -i 26-50 -n 1
+   ```
+
+4. **Commit to whatever it returns**, even if it isn't the one you'd have picked. Redraw only if research shows the drawn topic is unworkable (kill criterion below) or already covered — and say so explicitly when you do.
+5. **Print the draw** (the command and its output) in your reply, so the choice is visibly not hand-picked.
+6. **Research** the drawn topic before writing (below).
+7. **Write the full essay** as a Markdown artifact.
+8. **Render** via the pipeline (see the type-specific file).
+
+**If a topic is discarded** — research collapsed the story, or it fails for any other reason — do not quietly substitute a favorite: go back to step 1, generate 50 fresh candidates, and draw again, exactly as at the start.
 
 ## Research strategy
 

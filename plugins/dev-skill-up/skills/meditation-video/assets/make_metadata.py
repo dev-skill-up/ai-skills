@@ -11,27 +11,33 @@ Hard limits enforced here: description 5,000 chars (sources spill to
 pinned-comment.txt when over), tags 500 chars (trimmed from the end, dropped
 tags printed).
 
+The description talks about the video's SUBJECT only. It never mentions the
+pipeline or tools, never describes the essay's own methodology, never states
+licence positions or grants reuse permission, and never inventories what the
+video doesn't contain. Credits are credit for material used — nothing more.
+
 Usage:
     python3 make_metadata.py meta.json --spec essay.json --workdir work \
-        --shots shots.resolved.json --credits credits.json [--outdir .]
+        [--shots shots.resolved.json --credits credits.json] [--outdir .]
+
+For a sleep essay there is no shot list: omit --shots/--credits (or point at
+files that don't exist) and put the backdrop's credit in meta.json as an
+"image_credits" line.
 
 meta.json:
     {"title": "...",                      # warns if over 60 chars
      "hook": "2-4 short paragraphs...",   # open on the video's opening image
      "chapters": [{"segment": 0, "title": "A cat's head in a wreath"}, ...],
      "sources": ["Author, 'Title', Journal 12 (1999)", ...],
-     "sources_note": "one line on how disputes were handled",
-     "license_lead": "Every photograph here is Public Domain or CC0; ...",
      "substitutions": ["the card at 1:11 shows Seti I instead and says so"],
-     "credits_note": "Full records with links: CREDITS-images.md ...",
-     "production_note": "Narrated with Kokoro TTS ... No stock footage, no music.",
+     "image_credits": ["Backdrop - Jane Doe, Unsplash"],  # shot-less runs
      "tags": ["most specific first", ...]}
 
 credits.json maps each plate (path or basename) to
-    {"subject": "...", "author": "...", "collection": "...", "license": "PD",
+    {"subject": "...", "author": "...", "collection": "...",
      "original": false}
-Entries with "original": true (diagrams, caption panels) are folded into one
-free-to-reuse line.
+Entries with "original": true (diagrams, caption panels) get NO credit line —
+there is nobody to credit, so the description says nothing about them.
 """
 import argparse
 import json
@@ -53,17 +59,15 @@ def strip_markdown(s):
 
 
 def credit_line(c):
-    """Subject - Author, Collection [licence] — empty fields dropped, never a
-    dangling comma."""
+    """Subject - Author, Collection — empty fields dropped, never a dangling
+    comma. No licence tag: credits credit, they don't state or grant
+    licences (the licence records stay in the manifest for verification)."""
     subject = strip_markdown(c.get("subject", ""))
     tail = ", ".join(x for x in (strip_markdown(c.get("author", "")),
                                  strip_markdown(c.get("collection", ""))) if x)
-    lic = strip_markdown(c.get("license", ""))
     line = subject or "(unlabelled image)"
     if tail:
         line += " - " + tail
-    if lic:
-        line += f" [{lic}]"
     return line
 
 
@@ -100,10 +104,14 @@ def main() -> None:
 
     with open(args.meta) as fh:
         meta = json.load(fh)
-    with open(args.shots) as fh:
-        shots = json.load(fh)
-    with open(args.credits) as fh:
-        credits = json.load(fh)
+    # A sleep essay has no shot list — run without one and take credits from
+    # meta.json's "image_credits" lines instead.
+    shots, credits = [], {}
+    if os.path.exists(args.shots):
+        with open(args.shots) as fh:
+            shots = json.load(fh)
+        with open(args.credits) as fh:
+            credits = json.load(fh)
     _, starts, total = segment_start_times(args.spec, args.workdir)
 
     title = meta.get("title", "")
@@ -112,9 +120,10 @@ def main() -> None:
 
     chapter_lines = build_chapters(meta["chapters"], starts, total)
 
-    # Credits: one line per unique plate, in shot order (de-dup by plate, not
-    # by shot — a reused image gets one credit).
-    seen, credit_lines, originals, missing = set(), [], [], []
+    # Credits: one line per unique third-party plate, in shot order (de-dup by
+    # plate, not by shot — a reused image gets one credit). Original plates
+    # (diagrams, caption panels) get no line: nobody to credit, say nothing.
+    seen, credit_lines, missing = set(), [], []
     for s in shots:
         plate = s["plate"]
         if plate in seen:
@@ -123,18 +132,16 @@ def main() -> None:
         c = credits.get(plate) or credits.get(os.path.basename(plate))
         if c is None:
             missing.append(plate)
-        elif c.get("original"):
-            originals.append(plate)
-        else:
+        elif not c.get("original"):
             credit_lines.append(credit_line(c))
     if missing:
         print(f"WARNING: no credit entry for {len(missing)} plate(s): "
               + ", ".join(missing))
+    credit_lines += [strip_markdown(x) for x in meta.get("image_credits", [])]
+    credit_lines += [strip_markdown(x) for x in meta.get("substitutions", [])]
 
     sources = [strip_markdown(s) for s in meta.get("sources", [])]
     src_block = ["SOURCES"] + sources
-    if meta.get("sources_note"):
-        src_block.append(meta["sources_note"])
 
     def assemble(sources_in_desc):
         parts = [meta["hook"].strip(), "", "CHAPTERS"] + chapter_lines + [""]
@@ -142,19 +149,10 @@ def main() -> None:
             parts += src_block + [""]
         else:
             parts += ["SOURCES", "Full source list in the pinned comment.", ""]
-        parts.append("IMAGE CREDITS")
-        if meta.get("license_lead"):
-            parts.append(meta["license_lead"])
-        parts += credit_lines
-        for sub in meta.get("substitutions", []):
-            parts.append(sub)
-        if originals:
-            parts.append("Diagrams and caption panels are original, made for "
-                         "this video, and free to reuse.")
-        if meta.get("credits_note"):
-            parts.append(meta["credits_note"])
-        if meta.get("production_note"):
-            parts += ["", meta["production_note"]]
+        # Only when there is something to credit — never an empty header, and
+        # never a note explaining that everything is original.
+        if credit_lines:
+            parts += ["IMAGE CREDITS"] + credit_lines
         return "\n".join(parts).strip() + "\n"
 
     desc = assemble(sources_in_desc=True)

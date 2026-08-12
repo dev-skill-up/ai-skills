@@ -27,6 +27,11 @@ SCRIPT.json shape (see meditation.example.json):
       "segments": [ {"text": "...", "pause": 3}, ... ]
     }
 
+A segment may carry its own "speed" to override the top-level one — used when
+a relaxation/meditation section (own pacing) is spliced into a sleep essay's
+segments. Note the resume check is by file existence, so changing a speed
+does not regenerate an existing WAV: delete the affected seg_NNN.wav first.
+
 GOTCHA: do not name any file in your working directory `segments.py`. Kokoro's
 phonemizer dependency imports a third-party package literally named `segments`,
 and a local `segments.py` will shadow it and crash with a confusing
@@ -164,7 +169,8 @@ def main() -> None:
 
         k = Kokoro(args.model, args.voices)
         for i, s in todo:
-            audio, sr = k.create(s["text"], voice=voice, speed=speed, lang=lang)
+            audio, sr = k.create(s["text"], voice=voice,
+                                 speed=float(s.get("speed", speed)), lang=lang)
             sf.write(path(i), audio, sr)
             preview = s["text"][:55].replace("\n", " ")
             print(f"  seg {i:03d} ({len(audio) / sr:5.1f}s): {preview}")

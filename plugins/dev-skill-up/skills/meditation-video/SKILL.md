@@ -53,7 +53,7 @@ A meditation script here is a list of `{ "text": ..., "pause": <seconds> }` obje
 }
 ```
 
-Read `references/meditation-script-craft.md` before writing — it covers the arc, the two pause lengths (≈3s short, 7–30s long) and when to use each, the audience calibration, and the two easy-to-miss rules: **start almost immediately** (tiny `lead_in`) and **end with an explicit spoken close**, not trailing silence, so the listener knows when to get up. `speed: 0.9` slows the voice slightly, which reads as calmer.
+Read `references/meditation-script-craft.md` before writing — it covers the arc, the two pause lengths (≈3s short, 7–30s long) and when to use each, the audience calibration, and the two easy-to-miss rules: **start almost immediately** (tiny `lead_in`) and **end with an explicit spoken close**, not trailing silence, so the listener knows when to get up. `speed: 0.9` slows the voice slightly, which reads as calmer. A segment may also carry its own `"speed"`, overriding the top-level one — that's how a meditation section spliced into a sleep essay keeps its own pace.
 
 ### 2. Generate the narration segments
 
@@ -103,7 +103,7 @@ Then present the file to the person. **For either essay mode, the video alone is
 
 ### 7. Publishing metadata (required for essays)
 
-Any sleep-essay or casual-essay run must produce **`youtube-description.txt`** (hook, chapters generated from real narration timings, sources, image credits, production note — under 5,000 characters) and **`youtube-tags.txt`** (under 500 characters, most specific first). Generate them with `assets/make_metadata.py` from the shot list and credits manifest — never by hand, or they drift from the video on the next re-render. The full spec is `references/publishing-metadata.md`. This step was forgotten once and had to be asked for; treat it as part of rendering, not an extra.
+Any sleep-essay or casual-essay run must produce **`youtube-description.txt`** (hook, chapters generated from real narration timings, sources, image credits — under 5,000 characters) and **`youtube-tags.txt`** (under 500 characters, most specific first). Generate them with `assets/make_metadata.py` — never by hand, or they drift from the video on the next re-render. A casual essay feeds it the shot list and credits manifest; a sleep essay has neither and runs it without them, with the backdrop credit in `meta.json`. The description is about the video's **subject only** — no pipeline or tool info, no describing the essay's own methodology, no licence statements or reuse grants, no "no stock footage / no music" inventory; credits credit what was used, nothing more. The full spec is `references/publishing-metadata.md`. This step was forgotten once and had to be asked for; treat it as part of rendering, not an extra.
 
 ## Iterating
 
@@ -126,16 +126,19 @@ The flow:
 
    ```bash
    python3 assets/essay_to_segments.py essay.md --out essay.json \
-       --voice af_heart --speed 0.9 --sentence-pause 0.5 --paragraph-pause 1.4 --tail 4
+       --voice af_heart --speed 0.7 --sentence-pause 0.5 --paragraph-pause 1.4 --tail 4
    ```
 
-   It strips Markdown, splits the prose into one segment per sentence (keeping generation chunked and resumable), inserts small pauses, and prints the word count and estimated read time so you can confirm the 15-minute floor. It also stamps the JSON `"passes_required": true` — the marker `generate_segments.py` uses to enforce the audio gate.
-4. **Run the shared pipeline** on `essay.json`: `generate_segments.py essay.json --passes passes.json` → `build_audio.py` → fetch image → `render_video.py`. Two deliberate differences at render time:
+   `--speed 0.7` is the sleep-essay setting. The script strips Markdown, splits the prose into one segment per sentence (keeping generation chunked and resumable), inserts small pauses, and prints the word count and estimated read time so you can confirm the 15-minute floor. It also stamps the JSON `"passes_required": true` — the marker `generate_segments.py` uses to enforce the audio gate.
+
+   **If the video includes a relaxation/meditation section** (e.g. a body relaxation before the essay), that section is a meditation, not essay prose: keep it out of the essay Markdown, write it per `references/meditation-script-craft.md` with **real silences** (`pause` values, not filler) and **its own per-segment `"speed"`**, and splice its segments into the JSON — see `references/sleep-essay-craft.md`.
+4. **Run the shared pipeline** on `essay.json`: `generate_segments.py essay.json --passes passes.json` → `build_audio.py` → fetch image → `render_video.py`. Deliberate differences at render time:
    - **No wake-up ending and a longer dissolve** — a sleep essay must not tell the listener to return to their day; let it trail off. Pass `--audio-fade-out 4` (or more) to `render_video.py`.
-   - **A dark, dim backdrop** (night sky, dark water) so a phone left playing doesn't light the room.
+   - **A dark, dim backdrop** (night sky, dark water) so a phone left playing doesn't light the room. Fetch it from Unsplash via `assets/fetch_image.sh` — never generate one — and **randomize the pick** among several fitting candidates (`shuf`), like the topic draw.
 
    Note that generation is the long pole here — tens of minutes of audio is minutes of CPU compute — but the generator is resumable, so just re-run it until all segments exist.
-5. **Emit the publishing metadata** (step 7 above) and deliver it with the MP4.
+5. **Verify with `ffprobe`** (plus a full decode, step 6 above) that the MP4 plays and the duration comfortably clears 15 minutes.
+6. **Emit the publishing metadata** (step 7 above) and deliver the Markdown essay, the MP4, and the metadata files together in one `SendUserFile` call so all of them are downloadable from the session.
 
 ## Casual essays
 
@@ -151,10 +154,10 @@ A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, thre
 ## References
 
 - `references/meditation-script-craft.md` — guided-meditation words and silence: structure, pacing, audience, sources.
-- `references/essay.md` — craft shared by both essay types: the topic workflow (pitch 50 → select → research → write → render, restart on discard), research strategy, the "no story, no essay" kill criterion, the six hard house rules, and the pre-audio de-AI/fact-check requirement.
-- `references/sleep-essay-craft.md` — sleep-essay craft: the "lore" criterion, topic domains and examples, topics already covered, and writing prose for the ear.
+- `references/essay.md` — craft shared by both essay types: the topic workflow (seed with web searches → pitch 50 → randomized draw from the bottom half → research → write → render, restart on discard), research strategy, the "no story, no essay" kill criterion, the six hard house rules, and the pre-audio de-AI/fact-check requirement.
+- `references/sleep-essay-craft.md` — sleep-essay craft: the "lore" criterion, topic domains and examples, topics already covered, writing prose for the ear, the 0.7 narration speed, the randomized Unsplash backdrop, and how to splice in a relaxation/meditation section (real silences, own speed).
 - `references/casual-essay.md` — the awake documentary: register, measured length calibration, shot cadence and selection, plate styles, diagram craft, render settings and costs, delivery under the size cap.
 - `references/image-sourcing.md` — sourcing 30 topical images honestly: tier A (no obligation) as the only allowable tier — never ask — plus tier-A techniques, verified sources, Commons API resolution, SHA-1 provenance checks, and what to do when no honest image exists.
 - `references/ai-tells.md` — removing machine-written tells from essay prose: the convergence loop and its hard audio gate (enforced by `generate_segments.py` via the `passes.json` report), the destructive excision and cut passes, the adversarial/cold review passes, `assets/tell_metrics.py` with measured targets, the structural tells, over-correction, narration-specific rules, and the fact-check pass.
-- `references/publishing-metadata.md` — the required description/chapters/tags deliverables: structure, hard limits, credit rules, and generating it all from the shot list so it never drifts.
+- `references/publishing-metadata.md` — the required description/chapters/tags deliverables: structure, hard limits, what never goes in a description (pipeline info, methodology self-description, licence statements), credits-are-just-credits rules, and generating it all with `make_metadata.py` so it never drifts.
 - `references/kokoro-and-ffmpeg.md` — the technical layer: Kokoro ONNX setup, the full voice roster, the still render and the slideshow render (crop-vs-zoompan, xfade math, render costs), process-kill and verification gotchas, cairosvg gotchas.
