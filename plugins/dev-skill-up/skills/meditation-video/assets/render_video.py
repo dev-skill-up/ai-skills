@@ -15,8 +15,10 @@ Key choices baked in (see references/kokoro-and-ffmpeg.md for the why):
 Usage:
     python3 render_video.py IMAGE AUDIO.wav [--out meditation.mp4] [--fps 10]
         [--fade-in 2] [--video-fade-out 2] [--audio-fade-out 0.6]
+        [--audio-bitrate 192k]
 """
 import argparse
+import os
 import subprocess
 
 import soundfile as sf
@@ -32,6 +34,10 @@ def main() -> None:
     ap.add_argument("--video-fade-out", type=float, default=2.0)
     ap.add_argument("--audio-fade-out", type=float, default=0.6,
                     help="kept short and inside the trailing silence to avoid clipping speech")
+    ap.add_argument("--audio-bitrate", default="192k",
+                    help="AAC bitrate; on a static image the audio is nearly the whole "
+                         "file, so use 96k for 15+ minute essays to stay under the "
+                         "30 MiB delivery limit")
     args = ap.parse_args()
 
     info = sf.info(args.audio)
@@ -53,12 +59,17 @@ def main() -> None:
         "-c:v", "libx264", "-preset", "ultrafast", "-tune", "stillimage",
         "-pix_fmt", "yuv420p", "-r", str(args.fps),
         "-vf", vf, "-af", af,
-        "-c:a", "aac", "-b:a", "192k",
+        "-c:a", "aac", "-b:a", args.audio_bitrate,
         "-movflags", "+faststart", "-shortest", args.out,
     ]
     print(" ".join(cmd))
     subprocess.run(cmd, check=True)
-    print(f"wrote {args.out} ({dur:.1f}s = {int(dur // 60)}:{int(dur % 60):02d})")
+    size = os.path.getsize(args.out) / 2**20
+    print(f"wrote {args.out} ({dur:.1f}s = {int(dur // 60)}:{int(dur % 60):02d}, "
+          f"{size:.1f} MiB)"
+          + ("" if size <= 30 else
+             " — over the 30 MiB delivery limit; re-render with a lower "
+             "--audio-bitrate or compress before sending (SKILL.md step 6)"))
 
 
 if __name__ == "__main__":

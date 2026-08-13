@@ -99,6 +99,16 @@ ffprobe -v error -show_entries format=duration:stream=codec_name,width,height \
 ffmpeg -v error -i meditation.mp4 -f null -   # silence means clean
 ```
 
+**Check the size against the 30 MiB delivery limit.** `SendUserFile` rejects files over **30 MiB**, and essay-length videos hit it routinely: a 20-minute slideshow master is ~133 MB, and even a static-image sleep essay carries ~29 MB of audio alone at the default 192 kbps AAC. A 5-minute meditation is fine; anything 15+ minutes almost certainly is not. If the MP4 is over the cap, don't trim content — re-encode it down with a two-pass, mono-audio pass:
+
+```bash
+ffmpeg -y -i master.mp4 -c:v libx264 -preset medium -b:v 125k -pass 1 -an -f null /dev/null
+ffmpeg -y -i master.mp4 -c:v libx264 -preset medium -b:v 125k -pass 2 \
+       -c:a aac -b:a 40k -ac 1 -movflags +faststart delivery.mp4
+```
+
+Pick the video bitrate from the runtime: `b:v ≈ (26 × 8192 ÷ duration_seconds) − 40` kbps targets ~26 MiB with margin (measured: 125k video + 40k mono audio took a 20:25 master from 133 MB to 24.8 MiB, and it holds up because slideshow content with dark frames compresses extremely well). After compressing, **full-decode the delivery file too** and spot-check a text-heavy frame for crispness — the checklist is in `references/casual-essay.md` § Delivery. Send the compressed file; keep the master on disk for the actual YouTube upload and say so.
+
 Then present the file to the person. **For either essay mode, the video alone is not the deliverable**: also emit `youtube-description.txt` and `youtube-tags.txt` (see step 7) and send them in the same delivery (the same `SendUserFile` call) as the MP4. Offer the obvious next tweaks — different voice, more or less silence, a different backdrop — since each is a one-line change and re-render.
 
 ### 7. Publishing metadata (required for essays)
@@ -134,10 +144,11 @@ The flow:
    **If the video includes a relaxation/meditation section** (e.g. a body relaxation before the essay), that section is a meditation, not essay prose: keep it out of the essay Markdown, write it per `references/meditation-script-craft.md` with **real silences** (`pause` values, not filler) and **its own per-segment `"speed"`**, and splice its segments into the JSON — see `references/sleep-essay-craft.md`.
 4. **Run the shared pipeline** on `essay.json`: `generate_segments.py essay.json --passes passes.json` → `build_audio.py` → fetch image → `render_video.py`. Deliberate differences at render time:
    - **No wake-up ending and a longer dissolve** — a sleep essay must not tell the listener to return to their day; let it trail off. Pass `--audio-fade-out 4` (or more) to `render_video.py`.
+   - **Render with `--audio-bitrate 96k`** — on a static-image video the audio is nearly the whole file, and the default 192 kbps blows the 30 MiB delivery limit by itself past ~20 minutes. 96 kbps AAC is transparent for a single spoken voice and keeps a 25-minute essay comfortably under the cap, no re-encode needed.
    - **A dark, dim backdrop** (night sky, dark water) so a phone left playing doesn't light the room — but not so dark it turns into a black rectangle: it doubles as the thumbnail, so a recognizable subject must survive thumbnail size. Fetch it from Unsplash via `assets/fetch_image.sh` — never generate one — and **randomize the pick** among several fitting candidates (`shuf`), like the topic draw.
 
    Note that generation is the long pole here — tens of minutes of audio is minutes of CPU compute — but the generator is resumable, so just re-run it until all segments exist.
-5. **Verify with `ffprobe`** (plus a full decode, step 6 above) that the MP4 plays and the duration comfortably clears 15 minutes.
+5. **Verify with `ffprobe`** (plus a full decode, step 6 above) that the MP4 plays, the duration comfortably clears 15 minutes, and the file is under the 30 MiB delivery limit — if it isn't, re-encode per step 6.
 6. **Emit the publishing metadata** (step 7 above) and deliver the Markdown essay, the MP4, and the metadata files together in one `SendUserFile` call so all of them are downloadable from the session.
 
 ## Casual essays
@@ -149,7 +160,7 @@ A casual essay is the **awake** documentary: same Kokoro + ffmpeg pipeline, thre
 3. **Segments at speed 1.0**: `essay_to_segments.py --speed 1.0 --sentence-pause 0.6 --paragraph-pause 2.2 --lead-in 0.5 --tail 4`, then bump the title segment's pause to ~2.8. Generate with `generate_segments.py essay.json --passes passes.json` and build audio as usual.
 4. **Source ~30 images and build ~7 diagrams**, verify every licence (`references/image-sourcing.md`), make plates with `assets/make_plates.py`.
 5. **Plan shots and render** with `assets/render_slideshow.py` — anchors + greedy fill, cues timed off the real WAVs, one ffmpeg pass at ~1.15× realtime, so **start the render before you write the credits**. Eyeball the used-vs-unused plate diff before rendering.
-6. **Generate metadata** with `assets/make_metadata.py`, verify with a full decode, compress under the 30 MB delivery cap, and deliver MP4 + description + tags together.
+6. **Generate metadata** with `assets/make_metadata.py`, verify with a full decode, compress under the 30 MiB delivery limit (step 6 above — a 20-minute master always needs it), and deliver MP4 + description + tags together.
 
 ## References
 
