@@ -82,6 +82,7 @@ Why each piece:
 - **`-pix_fmt yuv420p`** and **even dimensions** (`scale=trunc(iw/2)*2:trunc(ih/2)*2`) — both required for broad playback (browsers, QuickTime, phones). Odd width/height makes some players refuse the file.
 - **Video fades** — `fade=in` over 2s at the start, `fade=out` over 2s at the end, for a calm open and close.
 - **Audio fade** — a short `afade=out` (0.6s) placed in the *trailing silence*, computed as `duration − 0.6`. Keep it short and late so it never fades out over spoken words. If the script ends with an explicit spoken close (as it should), the last words finish before this fade begins.
+- **`-c:a aac -b:a 192k`** — the default audio bitrate (`--audio-bitrate` overrides it). On a still-image render the audio is nearly the whole file — the 10fps held frame compresses to almost nothing — so 192 kbps crosses the 30 MiB delivery limit on its own at around 20 minutes. For a 15+-minute sleep essay, render with `--audio-bitrate 96k` (transparent for a single spoken voice) and skip the delivery re-encode entirely; the script prints a warning when the output lands over the cap.
 - **`-movflags +faststart`** — relocates the moov atom to the front so the file streams/plays immediately instead of needing a full download first.
 - **`-shortest`** — stop when the audio ends (the looped image would otherwise run forever).
 
@@ -118,7 +119,7 @@ What worked: **20 fps** (slideshow, no real motion), `-preset veryfast -crf 21`,
 
 **Cost: ~1.15× realtime.** A 20-minute video takes ~23 minutes to render. Budget for it and start it before writing the credits.
 
-For delivery under a 30 MB cap, a two-pass `-preset medium -b:v 125k` + `-b:a 40k -ac 1` re-encode brought 133 MB (CRF 21 master) down to 25 MB for 20:25 — exact commands and the verify steps in `references/casual-essay.md`.
+For delivery under the 30 MiB cap, a two-pass `-preset medium -b:v 125k` + `-b:a 40k -ac 1` re-encode brought 133 MB (CRF 21 master) down to 24.8 MiB for 20:25 — exact commands, the bitrate formula for other runtimes, and the verify steps in `references/casual-essay.md`.
 
 ## Killing a render without corrupting it
 

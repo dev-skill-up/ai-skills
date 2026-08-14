@@ -277,10 +277,10 @@ def main() -> None:
     if verify.returncode != 0 or verify.stderr.strip():
         raise SystemExit(f"FULL-DECODE CHECK FAILED for {args.out}:\n"
                          f"{verify.stderr.strip()}")
-    size = os.path.getsize(args.out) / 1e6
-    print(f"wrote {args.out}: {total:.0f}s, {size:.0f} MB, full decode clean"
+    size = os.path.getsize(args.out) / 2**20
+    print(f"wrote {args.out}: {total:.0f}s, {size:.0f} MiB, full decode clean"
           + ("" if size <= 30 else
-             " — over the 30 MB delivery cap; compress before sending "
+             " — over the 30 MiB delivery limit; compress before sending "
              "(references/casual-essay.md)"))
 
 

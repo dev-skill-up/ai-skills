@@ -114,7 +114,7 @@ For any chart, read the `dataviz` skill first. Its interactive guidance does not
 
 ## Delivery
 
-`SendUserFile` caps at **30 MB**, which a 20-minute 1080p master blows past (133 MB at CRF 21). Two-pass compress:
+`SendUserFile` caps at **30 MiB**, which a 20-minute 1080p master blows past (133 MB at CRF 21) — expect this every run, not occasionally. Two-pass compress:
 
 ```bash
 ffmpeg -y -i master.mp4 -c:v libx264 -preset medium -b:v 125k -pass 1 -an -f null /dev/null
@@ -122,7 +122,7 @@ ffmpeg -y -i master.mp4 -c:v libx264 -preset medium -b:v 125k -pass 2 \
        -c:a aac -b:a 40k -ac 1 -movflags +faststart delivery.mp4
 ```
 
-That yielded **25 MB for 20:25**, and it holds up because slideshow content with dark diagram frames compresses extremely well. Before sending:
+That yielded **24.8 MiB for 20:25**, and it holds up because slideshow content with dark diagram frames compresses extremely well. The 125k was tuned for that runtime; for a different one, pick `b:v ≈ (26 × 8192 ÷ duration_seconds) − 40` kbps — that targets ~26 MiB total (video + 40k audio) with margin under the cap. Before sending:
 
 1. **Verify diagram text is still crisp** on a sampled frame (`ffmpeg -ss <t> -i delivery.mp4 -frames:v 1 check.png` on a diagram shot, then look at it).
 2. **Full-decode both master and compressed output** — `ffmpeg -v error -i out.mp4 -f null -`; `ffprobe` will not catch corruption (see the gotcha in `references/kokoro-and-ffmpeg.md`).
