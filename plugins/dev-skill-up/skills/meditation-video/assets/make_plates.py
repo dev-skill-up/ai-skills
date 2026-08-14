@@ -11,7 +11,9 @@ Two honest styles — never letterbox bars, never a blurred-copy fill:
   upscale, or so tall a 16:9 crop shows a sliver), the picture sits at full
   height in a right-hand column with a caption panel on the left, in the same
   palette as the diagrams. Give the caption a real fact so the screen is doing
-  work rather than apologising.
+  work rather than apologising — a label-length fact (a name, a date, an
+  attribution), never sentences. The narration owns the prose; a paragraph on
+  screen just competes with the voice.
 
 Sizes matter downstream: split panels (and diagrams) land at exactly 1920x1080,
 which is what makes render_slideshow.py's static gate hold them perfectly
@@ -163,6 +165,11 @@ def main() -> None:
             if not item.get("caption"):
                 print(f"  WARNING: {item['out']} became a split panel with no "
                       f"caption — give it a real fact to carry")
+            elif len(item["caption"].split()) > 18:
+                print(f"  WARNING: {item['out']} caption is "
+                      f"{len(item['caption'].split())} words — that is prose, "
+                      f"not a label. The screen carries names, dates, and "
+                      f"sources; the narration carries the sentences.")
             plate = split_panel(img, item.get("title", ""),
                                 item.get("caption", ""), item.get("accent"),
                                 args.max_upscale)

@@ -85,7 +85,7 @@ Hand-fitting 30 gaps is miserable and you will get it wrong. Instead:
 Blurring a copy of the image to fill the frame looks cheap. `assets/make_plates.py` builds two honest styles instead:
 
 - **Full-bleed (most images).** Scale to *cover* 1920×1080 with ~12% margin. The renderer crops a moving 1920×1080 window out of it, travelling along whichever axis has slack: a tall image tilts, a wide one pans, one with slack both ways drifts. Nothing is lost — whatever is off-frame arrives later in the shot. Alternate direction so consecutive shots never move the same way.
-- **Split panel (a few).** When an image cannot fill the frame honestly — over ~1.25× upscale, or so tall a 16:9 crop shows a sliver — put the picture at full height in a right-hand column and a caption panel on the left, in the same type and palette as the diagrams. Make the caption carry a real fact so the screen is doing work rather than apologising.
+- **Split panel (a few).** When an image cannot fill the frame honestly — over ~1.25× upscale, or so tall a 16:9 crop shows a sliver — put the picture at full height in a right-hand column and a caption panel on the left, in the same type and palette as the diagrams. Make the caption carry a real fact so the screen is doing work rather than apologising — but a *label-length* fact (a name, a date, an attribution, one line of context), never sentences. The narration owns the prose; see "On-screen text is labels, not prose" below.
 
 Two motion rules the renderer enforces, and why:
 
@@ -107,6 +107,14 @@ Original SVG rendered with `cairosvg` at 1920×1080 is the highest-value visual 
 - dark warm ground (`#14110e`), warm off-white text;
 - one accent colour drawn from the subject itself;
 - serif for content and sans for labels, a rule under every title.
+
+### On-screen text is labels, not prose
+
+The narration owns the sentences. The screen owns what a spoken voice handles badly: names, dates, numbers, spellings, and structure. A viewer cannot read one text while listening to another, so a plate whose body is a paragraph — even a well-written one, even a true one — does nothing except make the frame busy and compete with the voice.
+
+The test is the title card. **"Francis Baily, 1774–1844" over a rule is a complete card.** Adding a sentence summarising what the narration is saying at that moment makes the card worse, not fuller. A real production run shipped exactly that failure: a name-and-dates card padded with a three-line paragraph restating the narration. Cut to the label.
+
+The same test kills fake diagrams: if a "diagram" has no structure to show — no axis, no map, no flow, no comparison, just sentences on the house palette — it is not a diagram, it is a paragraph in costume. Either find the structure the fact actually has (dates want a timeline, a quantity wants a chart, a claim-vs-claim wants two columns of *labels*) or give the shot to a photograph instead.
 
 For any chart, read the `dataviz` skill first. Its interactive guidance does not apply to a video frame, but the transferable rules do: pick the form from the data's job, single hue for magnitude with one emphasis colour, direct labels instead of a legend, recessive grid, never a dual axis.
 
