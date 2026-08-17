@@ -5,10 +5,10 @@ Checks, per skill under plugins/*/skills/*:
   - SKILL.md exists with YAML frontmatter containing `name` and `description`
   - `name` matches the skill directory, is lowercase-hyphen, and fits the
     64-char limit; `description` fits the 1024-char limit
-  - every references/... and assets/... path mentioned in the skill's
-    Markdown files exists on disk
-  - assets/*.py parse (syntax check), assets/*.sh pass `bash -n`,
-    assets/*.json parse
+  - every references/..., assets/... and scripts/... path mentioned in the
+    skill's Markdown files exists on disk
+  - assets|scripts/*.py parse (syntax check), assets|scripts/*.sh pass
+    `bash -n`, assets|scripts/*.json parse
 
 Repo-level: marketplace.json and plugin.json parse, and every plugin
 `source` in the marketplace catalog exists.
@@ -22,7 +22,7 @@ import sys
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-PATH_RE = re.compile(r"\b((?:references|assets)/[\w./-]+\w)")
+PATH_RE = re.compile(r"\b((?:references|assets|scripts)/[\w./-]+\w)")
 
 errors = []
 
@@ -91,7 +91,7 @@ def check_skill(skill_dir):
             if not (skill_dir / path).is_file() and not (md.parent / path).is_file():
                 err(f"{md.relative_to(ROOT)}: references missing file {path}")
 
-    for asset in sorted(skill_dir.glob("assets/*")):
+    for asset in sorted([*skill_dir.glob("assets/*"), *skill_dir.glob("scripts/*")]):
         arel = asset.relative_to(ROOT)
         if asset.suffix == ".py":
             try:
