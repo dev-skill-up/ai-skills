@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--
+  5x7in invitation template.
+
+  HARD RULE: no CSS gradients anywhere in this file. Chromium turns them into PDF
+  FunctionType 4 shadings that render as magenta garbage in some viewers. The
+  background is a raster PNG from make_background.py. Image opacity is baked into
+  the alpha channel by clean_sticker.py --fade, NOT set with CSS `opacity`, which
+  would create PDF transparency groups.
+
+  Replace every {{TOKEN}}. Delete blocks you do not need.
+  Render:
+    chromium --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
+             --print-to-pdf=out.pdf invite.html
+    pdftoppm -png -r 300 -singlefile out.pdf out
+-->
+<html><head><meta charset="utf-8">
+<style>
+:root{
+  --ink:        {{INK}};          /* body text            e.g. #33352b */
+  --accent:     {{ACCENT}};       /* name, venue          e.g. #a8321c */
+  --secondary:  {{SECONDARY}};    /* eyebrow, labels      e.g. #1f5f4b */
+  --gold:       {{GOLD}};         /* rules, frame inner   e.g. #c99a3f */
+  --muted:      {{MUTED}};        /* flourish, footer     e.g. #8a6a2b */
+  --paper:      {{PAPER}};        /* must match --base of make_background.py */
+}
+@page { size: 5in 7in; margin: 0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:5in; height:7in; }          /* REQUIRED — without it the page renders blank */
+body{
+  background-image:url(img/bg.png);
+  background-size:5in 7in;
+  background-repeat:no-repeat;
+  background-color:var(--paper);
+  font-family:"TeX Gyre Pagella","Noto Color Emoji",serif;
+  color:var(--ink);
+  position:relative; overflow:hidden;
+}
+
+/* double rule frame */
+.frame{ position:absolute; inset:.22in; border:1.6px solid var(--secondary);
+        box-shadow: inset 0 0 0 3.5px var(--paper), inset 0 0 0 5px var(--gold); }
+
+/* four corner sprigs: one pre-faded asset, rotated and mirrored */
+.corner{ position:absolute; width:.58in; }
+.c1{ top:.28in; left:.28in;   transform:rotate(-18deg); }
+.c2{ top:.28in; right:.28in;  transform:rotate(18deg) scaleX(-1); }
+.c3{ bottom:.28in; left:.28in;  transform:rotate(18deg) scaleY(-1); }
+.c4{ bottom:.28in; right:.28in; transform:rotate(-18deg) scale(-1,-1); }
+
+.inner{ position:absolute; inset:.38in .5in; display:flex; flex-direction:column;
+        align-items:center; text-align:center; }
+
+.eyebrow{ font-family:"Poppins",sans-serif; font-size:8pt; letter-spacing:.30em;
+          text-transform:uppercase; color:var(--secondary); font-weight:500; }
+.hero{ width:{{HERO_WIDTH}}; margin:.02in 0 0; }        /* themed line art, 1.0-1.6in */
+.flourish{ font-family:"TeX Gyre Chorus",cursive; font-size:13.5pt;
+           color:var(--muted); margin-top:.02in; }
+.name{ font-family:"TeX Gyre Chorus",cursive; font-size:{{NAME_SIZE}};  /* 37-46pt */
+       line-height:1.0; color:var(--accent); margin:.02in 0 .01in; }
+.sub{ font-family:"Poppins",sans-serif; font-size:10pt; letter-spacing:.22em;
+      text-transform:uppercase; color:var(--secondary); font-weight:500; }
+.divider{ width:{{DIVIDER_WIDTH}}; margin:.06in 0 .03in; }
+
+.card{ width:100%; border-top:1px solid var(--gold); border-bottom:1px solid var(--gold);
+       padding:.10in 0 .11in; }
+.row{ display:flex; align-items:center; justify-content:center; gap:.08in;
+      font-size:11.5pt; line-height:1.45; }
+.row .em{ font-family:"Noto Color Emoji"; font-size:11.5pt; }
+.row b{ font-weight:normal; }
+.venue{ font-size:14pt; color:var(--accent); }
+.addr{ font-family:"Poppins",sans-serif; font-size:7.2pt; letter-spacing:.13em;
+       text-transform:uppercase; color:var(--secondary); margin:.01in 0 .05in; }
+
+/* cake with the honoree's initial on its blank panel */
+.cakewrap{ position:relative; display:inline-block; margin:.06in 0 .01in; }
+.cake{ width:.84in; display:block; }
+.monogram{ position:absolute; left:50%; top:63.5%; transform:translate(-50%,-50%);
+           font-family:"TeX Gyre Chorus",cursive; font-size:20pt; color:var(--accent); }
+
+.closing{ font-family:"TeX Gyre Chorus",cursive; font-size:13pt; color:var(--muted);
+          line-height:1.3; margin-top:.01in; }
+.footer{ font-family:"Poppins",sans-serif; font-size:7.8pt; letter-spacing:.17em;
+         text-transform:uppercase; color:var(--muted); margin-top:.05in; }
+</style></head>
+<body>
+  <div class="frame"></div>
+  <img class="corner c1" src="img/{{CORNER_ASSET}}">
+  <img class="corner c2" src="img/{{CORNER_ASSET}}">
+  <img class="corner c3" src="img/{{CORNER_ASSET}}">
+  <img class="corner c4" src="img/{{CORNER_ASSET}}">
+
+  <div class="inner">
+    <div class="eyebrow">You&nbsp;are&nbsp;invited</div>
+    <img class="hero" src="img/{{HERO_ASSET}}">
+    <div class="flourish">{{FLOURISH}}</div>
+
+    <div class="name">{{NAME}}</div>
+    <div class="sub">{{OCCASION}}</div>
+
+    <img class="divider" src="img/{{DIVIDER_ASSET}}">
+
+    <div class="card">
+      <div class="row"><span class="em">{{VENUE_EMOJI}}</span><span class="venue">{{VENUE}}</span></div>
+      <div class="addr">{{STREET}} &middot; {{NEIGHBOURHOOD}}</div>
+      <div class="row"><span class="em">🗓️</span><b>{{DATE_LONG}}</b></div>
+      <div class="row"><span class="em">🕕</span><b>{{TIME_WORDS}}</b></div>
+      <div class="row"><span class="em">🍽️</span><b>{{PARTY_SIZE_WORDS}}</b></div>
+    </div>
+
+    <div class="cakewrap">
+      <img class="cake" src="img/cake_clean.png"><span class="monogram">{{INITIAL}}</span>
+    </div>
+    <div class="closing">{{CLOSING_LINE_1}}<br>{{CLOSING_LINE_2}}</div>
+    <div class="footer">{{FOOTER}}</div>
+  </div>
+</body></html>
