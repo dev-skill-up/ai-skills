@@ -13,6 +13,7 @@ Everything lives in one plugin, **`dev-skill-up`** — an "automated Moshe" that
 | **talk-finder** | Interviews you to find the conference talk you're most energized to give, sanity-checks that it would land with an audience, then writes CFP-ready answers (title, abstract, description, audience takeaways). Works zero-shot too: tell it the conference, topic, and your angle and it drafts the whole thing. |
 | **celebration-invite** | Turns a restaurant reservation — usually a screenshot — into a calendar event with a real, routable street address, plus a print-quality 5×7″ invitation (PDF master and 1500×2100 PNG at 300 dpi). Resolves the venue's full address by web search, themes the card to the venue's cuisine, composes it from CC0 artwork, and verifies the PDF renders identically in every viewer. Runs unattended: it never blocks on a question and reports every assumption it made. |
 | **meditation-video** | Makes narrated spoken-word videos — a warm voice over still imagery, rendered as a shareable MP4, fully offline (Kokoro for the open-source voice, ffmpeg for the video, no API keys or GPU). Three modes: **guided meditations** (paced with deliberate silence), **sleep essays** (long-form narrated deep-dives on obscure topics, written to fall asleep to), and **casual essays** (awake documentaries — many licence-verified images, original diagrams, slow pans and dissolves, plus YouTube description/chapters/tags). Handles the whole pipeline from writing the words with the right pacing through to the final render. |
+| **judge-theme-ideas** | Judges a worldbuilding theme idea — a named concept, a five-or-six-word description, and a handful of attributes — and locates exactly which structural link breaks when it doesn't work. Runs a swap test (name ↔ description), a derivation test for each attribute, a coherence check, and a generativity test, then delivers a located diagnosis with a minimal repair instead of a score. |
 
 More skills will be added to the same plugin over time.
 
@@ -74,15 +75,18 @@ ai-skills/
 │           │   ├── SKILL.md
 │           │   ├── references/    # script craft + Kokoro/ffmpeg deep-dive
 │           │   └── assets/        # the pipeline scripts (setup, generate, build, render)
-│           └── celebration-invite/
-│               ├── SKILL.md
-│               ├── references/    # the rendering + verification checklist
-│               ├── scripts/       # background baking, CC0 sticker cleanup
-│               └── assets/        # the 5x7in card template
+│           ├── celebration-invite/
+│           │   ├── SKILL.md
+│           │   ├── references/    # the rendering + verification checklist
+│           │   ├── scripts/       # background baking, CC0 sticker cleanup
+│           │   └── assets/        # the 5x7in card template
+│           └── judge-theme-ideas/
+│               └── SKILL.md
 └── dist/
     ├── talk-finder.zip            # prebuilt for claude.ai / Cowork upload
     ├── meditation-video.zip
-    └── celebration-invite.zip
+    ├── celebration-invite.zip
+    └── judge-theme-ideas.zip
 ```
 
 ## Adding a new skill
@@ -94,6 +98,8 @@ CI (`.github/workflows/ci.yml`) checks every push: `scripts/check_skills.py` val
 ## A note on trust
 
 `talk-finder` is plain Markdown instructions plus one static HTML template — no scripts, no network calls, nothing that executes on its own.
+
+`judge-theme-ideas` is a single Markdown file — no scripts, no network calls, nothing that executes on its own.
 
 `celebration-invite` ships two small Python scripts (image processing with PIL/numpy/scipy — no network calls of their own) and one static HTML template. The skill itself does reach the network as part of its job: web search to confirm the venue's address, and the Openverse API to fetch CC0 artwork. It also creates a calendar event through whichever calendar MCP server you have connected, or writes an `.ics` file if you have none.
 
