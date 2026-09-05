@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agentskills.io/fun-game-design/trace-record.schema.json",
+  "title": "Bot trace record",
+  "description": "One record per bot action. Genre-neutral: instantiate action, resources, goals and snapshot per game. A trace is an array of these.",
+  "type": "object",
+  "required": ["t", "persona", "seed", "action", "result", "goals", "progression", "events"],
+  "additionalProperties": true,
+  "properties": {
+    "t": {
+      "type": "number",
+      "description": "Action index, or simulated time. Monotonic within a trace."
+    },
+    "persona": {
+      "type": "string",
+      "enum": ["optimizer", "impulsive", "optimizer-with-slips", "goal-tunneler", "hoarder", "distracted", "quitter"],
+      "description": "Frozen per release. Screens are tuned to bots, never bots to screens."
+    },
+    "seed": {
+      "type": ["integer", "string"],
+      "description": "Same seed + same actions must reproduce the same state."
+    },
+    "action": {
+      "description": "The action taken, in the game's own action vocabulary.",
+      "type": ["string", "object"]
+    },
+    "legal_action_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Size of the legal action set at this state. Zero progress-making moves is a dead end."
+    },
+    "result": {
+      "type": "string",
+      "description": "Short summary of what the action did."
+    },
+    "progress": {
+      "type": "boolean",
+      "description": "Whether this action made progress. Runs of false are stalls; a state where no legal action can set this true is a dead end."
+    },
+    "goals": {
+      "type": "array",
+      "description": "Visible goals and whether each is completable now. Drives the anticipation fraction.",
+      "items": {
+        "type": "object",
+        "required": ["id", "completable"],
+        "properties": {
+          "id": { "type": "string" },
+          "completable": { "type": "boolean" },
+          "steps_away": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "description": "Resource name to amount. Empty object is legal for games with no resources.",
+      "additionalProperties": { "type": ["number", "string", "boolean"] }
+    },
+    "progression": {
+      "type": ["integer", "string"],
+      "description": "Current progression step / tier / level."
+    },
+    "events": {
+      "type": "array",
+      "description": "Big changes at this action. first_seen_item / first_reached_tier / system_unlocked are what make the novelty interval computable; an events list containing only rewards cannot measure novelty.",
+      "items": {
+        "type": "object",
+        "required": ["kind"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "goal_complete", "progression_step", "high_tier_outcome", "combo_bonus",
+              "area_unlocked", "story_beat", "choice_made", "reveal",
+              "first_seen_item", "first_reached_tier", "system_unlocked",
+              "board_full", "resource_out", "skip", "quit"
+            ]
+          },
+          "detail": { "type": "string" },
+          "magnitude": {
+            "type": ["number", "null"],
+            "description": "Outcome size, for the escalation metric. Must be monotonic with the feedback the player receives."
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "description": "Optimizer-only. Feeds the decision index: always-large gap means one obvious move, always-near-zero means the choice does not matter.",
+      "properties": {
+        "best_value": { "type": "number" },
+        "second_best_value": { "type": "number" },
+        "gap": { "type": "number" },
+        "distinct_from_second": {
+          "type": "boolean",
+          "description": "True when the top two moves differ in kind, not just in value. Close AND different is what an interesting decision looks like."
+        }
+      }
+    },
+    "snapshot": {
+      "type": ["string", "null"],
+      "description": "ASCII rendering of the state. Emitted every N actions and at every big change, so a reader can see the state without replaying."
+    },
+    "annotation": {
+      "type": ["object", "null"],
+      "description": "Filled only by mistake-making personas.",
+      "required": ["mistake", "should_have"],
+      "properties": {
+        "mistake": {
+          "type": "string",
+          "enum": [
+            "destroyed_needed", "over_committed", "wasted_effort",
+            "banked_and_forgot", "spent_early", "missed_bonus"
+          ]
+        },
+        "should_have": { "type": "string" },
+        "foreseeable": {
+          "type": "boolean",
+          "description": "Was the consequence visible in the state at the time. Expensive AND unforeseeable is the punishing case."
+        },
+        "recovery_cost": {
+          "type": ["integer", "null"],
+          "description": "Actions until prior progress was regained. Filled by the scorer."
+        }
+      }
+    }
+  }
+}

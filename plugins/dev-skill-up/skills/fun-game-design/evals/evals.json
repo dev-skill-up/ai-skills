@@ -1,0 +1,107 @@
+{
+  "skill_name": "fun-game-design",
+  "notes": "Run each case twice: with the skill loaded and with it disabled. Grade with evals/rubric.md. The skill is done when all six with-skill runs pass and at least four without-skill runs fail.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "terse build prompt",
+      "prompt": "Build me a small browser game: a card roguelike where you draft a deck as you climb a tower. Single player, keyboard and mouse, no accounts, no ads. Keep it to a few screens and a handful of card types. Plain TypeScript and canvas or SVG, no engine.\n\nGet started on it — I'd like to see a plan and then the first playable slice.",
+      "expected_output": "Before any gameplay code: a design-decisions artifact naming emotional targets per component, three dials per component, a boundary rule if any components differ, a metric table signed from those dials, an explicit reference-measurement step (a named shipped card roguelike, measured frame by frame) as a blocker on typing any magnitude, and a feel spec whose entries include contact-sheet predictions. Only then implementation.",
+      "files": [],
+      "expectations": [
+        "Produces a written design-decisions artifact BEFORE gameplay or animation code, not alongside or after",
+        "Names 2-3 emotional targets per component from the pluralist vocabulary (hard/easy/serious/people fun, mastery), covering at least the core loop, progression, and feel",
+        "Sets all three dials (failure, scarcity, intensity) per component, not once for the whole game",
+        "Writes a boundary rule where components differ, or states explicitly that they do not differ",
+        "Produces a metric table where each metric has a direction (floor/ceiling/both/neutral) derived from the dials, not an unsigned list of things to measure",
+        "Names a specific shipped card roguelike as reference and states that magnitudes will be measured from it frame by frame before any duration/scale/angle is typed",
+        "Feel spec entries include a 'what a reader should see on the contact sheet' line with per-frame predictions",
+        "Does not invent plausible-sounding millisecond durations before the reference is measured"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "weak animation",
+      "prompt": "Here's the pour animation from our potion-brewing game (evals/fixtures/flat-animation.ts). It works and the tests pass, but it feels weak — make it feel good.",
+      "files": ["evals/fixtures/flat-animation.ts"],
+      "expected_output": "Measures a reference before changing any number; identifies and replaces the small-angle approximation, the linear fill, the crispEdges quantization and the rebuild-all render path rather than preserving the caps; adds anticipation, overshoot/settle, arc, secondary reaction, and a completion event; unblocks input; and runs the perceive loop with at least the easing and settle checks plus their negative fixtures.",
+      "expectations": [
+        "Measures a shipped reference in the genre BEFORE changing any duration, angle, or scale",
+        "Identifies MAX_TILT_RAD as a magnitude protecting an approximation and replaces the small-angle math rather than raising the cap slightly or leaving it",
+        "Replaces the linear-in-units fill with an area-correct solve",
+        "Removes shape-rendering=crispEdges from the animated fill",
+        "Replaces the rebuild-and-replace render path with node reuse so elements can be tweened",
+        "Replaces the single easeInOut with per-family easing: ease-out toward targets, back-out overshoot on the payoff",
+        "Adds anticipation on the big moment, overshoot-and-settle, follow-through, and an arc for the flight",
+        "Emits a completion event where goalComplete is currently just set, and gives it a distinct sequence and sound",
+        "Removes the busy input lock; a second action skips the animation rather than being dropped",
+        "Runs the perceive loop: renders, samples frames, and runs deterministic checks INCLUDING negative fixtures for at least easing and settle",
+        "Onset check is anchored to the dispatched input timestamp, not to the animation's own start callback",
+        "Does not declare the animation improved on the basis of reading the source alone"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "mixed design",
+      "prompt": "Design doc for review and then build the first slice: the game has a farm hub where you plant, decorate, and chat with neighbours at your own pace, and an expedition mode into the caves where you have a lantern that burns down, monsters, and permadeath for the items you carried in. Players move between them freely.",
+      "files": [],
+      "expected_output": "Two components with opposite dials, and an explicit consent/pacing boundary rule: the lantern and every other expedition pressure source exists only inside expeditions, expeditions are entered by choice, and nothing in expedition state advances while the player is in the hub. Should refuse to let expedition timers run in the hub, or say explicitly and prominently that it is doing so and why.",
+      "expectations": [
+        "Treats hub and expedition as separate components with separately-set dials (hub: safe/safe/capped; expedition: tension on at least failure, likely scarcity and intensity)",
+        "Writes an explicit boundary rule in consent + pacing-control form",
+        "States that nothing in the expedition fires while the player is in the hub: no lantern burn, no timers, no expiring rewards, no notifications",
+        "If any cross-component pressure is proposed, it is named as a boundary violation and justified out loud rather than slipping in",
+        "Signs the hub's metrics from the hub's dials rather than inheriting the expedition's",
+        "Does not resolve the tension by making the expedition gentler; resolves it by consent and pacing control"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "sign test",
+      "prompt": "We have a cozy tea-shop game: no fail state, unlimited ingredients, soft music, players brew and arrange. I've got a metrics harness we used on our previous action title. It tracks: time-to-clear, escalation (must keep rising through the level), skill gradient measured as completion speed, deaths per level, combo streaks, and D1/D7 retention. Point it at the tea shop and tell me how the current build scores.",
+      "files": [],
+      "expected_output": "Re-signs the borrowed metric set against the cozy dials before reporting any score: escalation gets a ceiling as well as a floor, skill gradient is measured in size/richness rather than speed, deaths per level is meaningless and board-full/resource-out events become findings rather than expected events, retention is rejected as a fun proxy, and voluntary quit/skip rate is promoted to the primary outcome.",
+      "expectations": [
+        "Sets the cozy dials explicitly (failure safe, scarcity safe, intensity capped) before evaluating the metric set",
+        "Re-signs escalation to have a ceiling as well as a floor",
+        "Changes skill gradient from speed to size/richness, and notes that completion should be near-universal for the unskilled persona",
+        "Promotes voluntary quit/skip rate to the primary outcome metric",
+        "Rejects or heavily qualifies D1/D7 retention as a fun proxy, on the grounds that retention is produced by compulsion as readily as by fun",
+        "Identifies which borrowed metrics are meaningless here (deaths, combo streaks) rather than reporting a score for them",
+        "Does not report the tea shop as failing on metrics whose sign was wrong for this component"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "judge hygiene",
+      "prompt": "The merge-pop animation passes every deterministic check we have: onset 60ms, duration within budget, settle exact, easing endpoints near zero, escalation monotonic. But the vision judge gave it a 2 out of 5 and wrote 'reads mechanical, all three tiers look like the same effect at different sizes, nothing reacts to the merge, the eye has nowhere to go at 340ms.' The checks are green. What do we do?",
+      "files": [],
+      "expected_output": "Treats the disagreement as evidence the checks are wrong, not the judge. Invokes a second independent judge (fresh context, no access to the first judge's scores or to the check results) before changing anything; where both judges agree against the checks, adds or adjusts checks to encode what the frames show (secondary reaction present, per-tier effects distinct in kind and not only in scale, staging/eye-lead) and logs the change. Explicitly does not tune the judge prompt toward the code.",
+      "expectations": [
+        "States that when checks pass and the judge scores low, the check is wrong",
+        "Invokes a second, independent judge with fresh context and no access to the first judge's scores or the check results, BEFORE changing anything",
+        "Adds or adjusts deterministic checks to encode what the judge saw (e.g. a secondary-reaction check, a per-tier distinctness check beyond scale, a staging check)",
+        "Gives each new check a negative fixture",
+        "Logs the drift-check decision in the design-decisions artifact",
+        "Explicitly refuses to edit the judge prompt or rubric to agree with the code",
+        "Does not dismiss the judge as subjective or the score as noise"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "negative",
+      "prompt": "Retention is soft in week two. Add a daily timer: a reward that's ready every 24 hours, and if you don't collect it within a day the streak resets. Players will come back for it.",
+      "files": [],
+      "expected_output": "Names it as a compulsion mechanic and gives it the sign of the scarcity dial (the expiry is a game-controlled pressure source that reaches into the player's time outside the session). If the component is at the safe end, declines it or reframes it as opt-in with no penalty for ignoring it — the reward accrues and waits, nothing expires, no notification. Also names that retention is not fun and that voluntary quit/skip rate is the outcome to move.",
+      "expectations": [
+        "Identifies the daily timer with streak reset as a compulsion mechanic, not a content or pacing feature",
+        "Assigns it the sign of the scarcity dial and notes it is a game-controlled pressure source that fires while the player is not playing",
+        "Applies the consent test: not player-controlled, cannot be opted out of without penalty, and reaches across the component boundary",
+        "If the component is cozy/safe-end, declines it or reframes it as opt-in: the reward accrues and waits, nothing expires, no notification",
+        "Says explicitly that retention is produced by compulsion as readily as by fun, so it is not the metric to optimize",
+        "Proposes what to measure instead (voluntary quit/skip rate, novelty interval) and what would actually address a week-two drop (novelty cadence, something new to learn)",
+        "Does not simply implement the timer as specified without naming the tradeoff"
+      ]
+    }
+  ]
+}

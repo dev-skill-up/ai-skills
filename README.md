@@ -14,6 +14,7 @@ Everything lives in one plugin, **`dev-skill-up`** — an "automated Moshe" that
 | **celebration-invite** | Turns a restaurant reservation — usually a screenshot — into a calendar event with a real, routable street address, plus a print-quality 5×7″ invitation (PDF master and 1500×2100 PNG at 300 dpi). Resolves the venue's full address by web search, themes the card to the venue's cuisine, composes it from CC0 artwork, and verifies the PDF renders identically in every viewer. Runs unattended: it never blocks on a question and reports every assumption it made. |
 | **meditation-video** | Makes narrated spoken-word videos — a warm voice over still imagery, rendered as a shareable MP4, fully offline (Kokoro for the open-source voice, ffmpeg for the video, no API keys or GPU). Three modes: **guided meditations** (paced with deliberate silence), **sleep essays** (long-form narrated deep-dives on obscure topics, written to fall asleep to), and **casual essays** (awake documentaries — many licence-verified images, original diagrams, slow pans and dissolves, plus YouTube description/chapters/tags). Handles the whole pipeline from writing the words with the right pacing through to the final render. |
 | **judge-theme-ideas** | Judges a worldbuilding theme idea — a named concept, a five-or-six-word description, and a handful of attributes — and locates exactly which structural link breaks when it doesn't work. Runs a swap test (name ↔ description), a derivation test for each attribute, a coherence check, and a generativity test, then delivers a located diagnosis with a minimal repair instead of a score. |
+| **fun-game-design** | Makes a game actually fun, and checks that it is by measurement rather than taste. Forces four commitments before code: emotional targets per component, three dials (failure, scarcity, intensity) that flip sign between action fun and cozy fun, magnitudes acquired by measuring a shipped reference frame by frame instead of typed from intuition, and a perceive loop — rendered frames, deterministic checks with negative fixtures, bot playtests with signed metrics, and blind judges whose disagreements fix the checks rather than the judges. Names the flat defaults you were about to write (one symmetric ease, a rotation cap protecting an approximation, completion as a state change with no event) instead of restating the principles you already know. |
 
 More skills will be added to the same plugin over time.
 
@@ -80,13 +81,19 @@ ai-skills/
 │           │   ├── references/    # the rendering + verification checklist
 │           │   ├── scripts/       # background baking, CC0 sticker cleanup
 │           │   └── assets/        # the 5x7in card template
-│           └── judge-theme-ideas/
-│               └── SKILL.md
+│           ├── judge-theme-ideas/
+│           │   └── SKILL.md
+│           └── fun-game-design/
+│               ├── SKILL.md
+│               ├── references/   # fun theory, game feel, the measurement toolkit
+│               ├── assets/       # design-decisions template, bot trace schema
+│               └── evals/        # six with/without-skill test cases + rubric
 └── dist/
     ├── talk-finder.zip            # prebuilt for claude.ai / Cowork upload
     ├── meditation-video.zip
     ├── celebration-invite.zip
-    └── judge-theme-ideas.zip
+    ├── judge-theme-ideas.zip
+    └── fun-game-design.zip
 ```
 
 ## Adding a new skill
@@ -100,6 +107,8 @@ CI (`.github/workflows/ci.yml`) checks every push: `scripts/check_skills.py` val
 `talk-finder` is plain Markdown instructions plus one static HTML template — no scripts, no network calls, nothing that executes on its own.
 
 `judge-theme-ideas` is a single Markdown file — no scripts, no network calls, nothing that executes on its own.
+
+`fun-game-design` is Markdown instructions plus a fill-in template, a JSON Schema, and one TypeScript eval fixture that exists to be criticized — no scripts, no network calls, nothing that executes on its own. It does ask Claude to run *your* game headlessly and record frames of it as part of its measurement loop.
 
 `celebration-invite` ships two small Python scripts (image processing with PIL/numpy/scipy — no network calls of their own) and one static HTML template. The skill itself does reach the network as part of its job: web search to confirm the venue's address, and the Openverse API to fetch CC0 artwork. It also creates a calendar event through whichever calendar MCP server you have connected, or writes an `.ics` file if you have none.
 
